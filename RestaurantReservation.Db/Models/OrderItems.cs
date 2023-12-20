@@ -8,7 +8,7 @@
         public int orderId { get; set; }
         public MenuItems menuItems { get; set; }
 
-        public int itemId { get; set; }
+        public int menuItemId { get; set; }
         public Order Order { get; set; }
     }
 

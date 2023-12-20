@@ -38,7 +38,86 @@ namespace RestaurantReservation.Db
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Order>()
-                .Ignore(o => o.totalAmount);
+                .Ignore(o => o.totalAmount)
+                .HasKey(x => x.orderId);
+
+            modelBuilder.Entity<Order>()
+                .HasOne(t => t.reservation)
+                .WithMany(r => r.orders)
+                .HasForeignKey(t => t.reservationId);
+
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.employee)
+                .WithMany(e => e.orders)
+                .HasForeignKey(o => o.employeeId);
+
+            modelBuilder.Entity<MenuItems>()
+                .HasKey(x => x.menuItemId);
+
+            modelBuilder.Entity<MenuItems>()
+                .HasOne(t => t.Restaurant)
+                .WithMany(r => r.menuItems)
+                .HasForeignKey(t => t.restaurantId);
+
+            modelBuilder.Entity<Customer>()
+                .HasKey(x => x.customerId);
+
+            modelBuilder.Entity<Employee>()
+                .HasKey(x => x.employeeId);
+
+            modelBuilder.Entity<Employee>()
+                .HasOne(t => t.Restaurant)
+                .WithMany(r => r.employees)
+                .HasForeignKey(t => t.restaurantId);
+
+            modelBuilder.Entity<OrderItems>()
+                .HasKey(x => x.orderItemId);
+
+            modelBuilder.Entity<OrderItems>()
+                .HasOne(t => t.Order)
+                .WithMany(r => r.OrderItems)
+                .HasForeignKey(t => t.orderId);
+
+            modelBuilder.Entity<OrderItems>()
+                .HasOne(t => t.menuItems)
+                .WithMany(r => r.OrderItems)
+                .HasForeignKey(t => t.menuItemId);
+
+            modelBuilder.Entity<Reservation>()
+                .HasKey(x => x.reservationId);
+
+            modelBuilder.Entity<Reservation>()
+                .HasOne(t => t.restaurant)
+                .WithMany(r => r.reservations)
+                .HasForeignKey(t => t.restaurantId);
+
+            modelBuilder.Entity<Reservation>()
+                .HasOne(t => t.customer)
+                .WithMany(r => r.reservations)
+                .HasForeignKey(t => t.customerID);
+
+            modelBuilder.Entity<Reservation>()
+                .HasOne(t => t.table)
+                .WithMany(r => r.reservations)
+                .HasForeignKey(t => t.tableId);
+
+            modelBuilder.Entity<Restaurant>()
+                .HasKey(x => x.RestaurantId);
+
+            modelBuilder.Entity<Table>()
+                .HasKey(x => x.tableId);
+
+            modelBuilder.Entity<Table>()
+                .HasOne(t => t.Restaurant)           
+                .WithMany(r => r.tables)             
+                .HasForeignKey(t => t.restaurantId);
+
+            var cascadeDeleteFKs = modelBuilder.Model.GetEntityTypes()
+                .SelectMany(t => t.GetForeignKeys())
+                .Where(fk => !fk.IsOwnership && fk.DeleteBehavior == DeleteBehavior.Cascade);
+
+            foreach (var FK in cascadeDeleteFKs)
+                FK.DeleteBehavior = DeleteBehavior.NoAction;
         }
     }
 }

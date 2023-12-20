@@ -7,7 +7,7 @@
         public int partySize { get; set; }
 
         public int restaurantId { get; set; }
-        public Restaurant reservation { get; set; }
+        public Restaurant restaurant { get; set; }
 
         public int tableId { get; set; }
         public Table table { get; set; }
