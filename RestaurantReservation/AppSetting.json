@@ -1,0 +1,3 @@
+﻿{
+  "constr": "Server = DESKTOP-MU79698\\SQLEXPRESS ; Database = RestaurantReservationCore ; Integrated Security = SSPI ; TrustServerCertificate = True"
+}
