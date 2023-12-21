@@ -1,13 +1,21 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using RestaurantReservation.Db;
+using RestaurantReservation.Db.Repositories;
 using System.Reflection;
 
 namespace RestaurantReservation
 {
-    internal class Program
+    public class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
+            using (var context = new RestaurantReservationDbContext())
+            {
+                var menuItemsRepository = new MenuItemsRepository(context);
 
+                await menuItemsRepository.ListOrdersAndMenuItems(2);
+            }
         }
     }
 }
