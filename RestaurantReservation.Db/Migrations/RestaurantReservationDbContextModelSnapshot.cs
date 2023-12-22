@@ -25,7 +25,10 @@ namespace RestaurantReservation.Db.Migrations
             modelBuilder.Entity("RestaurantReservation.Db.Models.Customer", b =>
                 {
                     b.Property<int>("customerId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("customerId"));
 
                     b.Property<string>("email")
                         .IsRequired()
@@ -45,7 +48,7 @@ namespace RestaurantReservation.Db.Migrations
 
                     b.HasKey("customerId");
 
-                    b.ToTable("customers");
+                    b.ToTable("Customers");
 
                     b.HasData(
                         new
@@ -93,7 +96,10 @@ namespace RestaurantReservation.Db.Migrations
             modelBuilder.Entity("RestaurantReservation.Db.Models.Employee", b =>
                 {
                     b.Property<int>("employeeId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("employeeId"));
 
                     b.Property<string>("firstName")
                         .IsRequired()
@@ -114,7 +120,7 @@ namespace RestaurantReservation.Db.Migrations
 
                     b.HasIndex("restaurantId");
 
-                    b.ToTable("employees");
+                    b.ToTable("Employees");
 
                     b.HasData(
                         new
@@ -170,7 +176,10 @@ namespace RestaurantReservation.Db.Migrations
             modelBuilder.Entity("RestaurantReservation.Db.Models.MenuItems", b =>
                 {
                     b.Property<int>("menuItemId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("menuItemId"));
 
                     b.Property<string>("description")
                         .IsRequired()
@@ -238,7 +247,10 @@ namespace RestaurantReservation.Db.Migrations
             modelBuilder.Entity("RestaurantReservation.Db.Models.Order", b =>
                 {
                     b.Property<int>("orderId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("orderId"));
 
                     b.Property<int>("employeeId")
                         .HasColumnType("int");
@@ -255,63 +267,63 @@ namespace RestaurantReservation.Db.Migrations
 
                     b.HasIndex("reservationId");
 
-                    b.ToTable("orders");
+                    b.ToTable("Orders");
 
                     b.HasData(
                         new
                         {
                             orderId = 1,
                             employeeId = 5,
-                            orderDate = new DateTime(2023, 12, 21, 18, 11, 26, 740, DateTimeKind.Local).AddTicks(8002),
+                            orderDate = new DateTime(2023, 12, 22, 19, 25, 51, 687, DateTimeKind.Local).AddTicks(3925),
                             reservationId = 1
                         },
                         new
                         {
                             orderId = 2,
                             employeeId = 5,
-                            orderDate = new DateTime(2023, 12, 21, 18, 11, 26, 740, DateTimeKind.Local).AddTicks(8053),
+                            orderDate = new DateTime(2023, 12, 22, 19, 25, 51, 687, DateTimeKind.Local).AddTicks(3976),
                             reservationId = 1
                         },
                         new
                         {
                             orderId = 3,
                             employeeId = 4,
-                            orderDate = new DateTime(2023, 12, 21, 18, 11, 26, 740, DateTimeKind.Local).AddTicks(8063),
+                            orderDate = new DateTime(2023, 12, 22, 19, 25, 51, 687, DateTimeKind.Local).AddTicks(3979),
                             reservationId = 2
                         },
                         new
                         {
                             orderId = 4,
                             employeeId = 4,
-                            orderDate = new DateTime(2023, 12, 21, 18, 11, 26, 740, DateTimeKind.Local).AddTicks(8066),
+                            orderDate = new DateTime(2023, 12, 22, 19, 25, 51, 687, DateTimeKind.Local).AddTicks(3981),
                             reservationId = 2
                         },
                         new
                         {
                             orderId = 5,
                             employeeId = 5,
-                            orderDate = new DateTime(2023, 12, 21, 18, 11, 26, 740, DateTimeKind.Local).AddTicks(8068),
+                            orderDate = new DateTime(2023, 12, 22, 19, 25, 51, 687, DateTimeKind.Local).AddTicks(3983),
                             reservationId = 3
                         },
                         new
                         {
                             orderId = 6,
                             employeeId = 4,
-                            orderDate = new DateTime(2023, 12, 21, 18, 11, 26, 740, DateTimeKind.Local).AddTicks(8071),
+                            orderDate = new DateTime(2023, 12, 22, 19, 25, 51, 687, DateTimeKind.Local).AddTicks(3987),
                             reservationId = 4
                         },
                         new
                         {
                             orderId = 7,
                             employeeId = 5,
-                            orderDate = new DateTime(2023, 12, 21, 18, 11, 26, 740, DateTimeKind.Local).AddTicks(8073),
+                            orderDate = new DateTime(2023, 12, 22, 19, 25, 51, 687, DateTimeKind.Local).AddTicks(3989),
                             reservationId = 5
                         },
                         new
                         {
                             orderId = 8,
                             employeeId = 5,
-                            orderDate = new DateTime(2023, 12, 21, 18, 11, 26, 740, DateTimeKind.Local).AddTicks(8075),
+                            orderDate = new DateTime(2023, 12, 22, 19, 25, 51, 687, DateTimeKind.Local).AddTicks(3991),
                             reservationId = 5
                         });
                 });
@@ -319,7 +331,10 @@ namespace RestaurantReservation.Db.Migrations
             modelBuilder.Entity("RestaurantReservation.Db.Models.OrderItems", b =>
                 {
                     b.Property<int>("orderItemId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("orderItemId"));
 
                     b.Property<int>("menuItemId")
                         .HasColumnType("int");
@@ -336,7 +351,7 @@ namespace RestaurantReservation.Db.Migrations
 
                     b.HasIndex("orderId");
 
-                    b.ToTable("orderItems");
+                    b.ToTable("OrderItems");
 
                     b.HasData(
                         new
@@ -421,7 +436,10 @@ namespace RestaurantReservation.Db.Migrations
             modelBuilder.Entity("RestaurantReservation.Db.Models.Reservation", b =>
                 {
                     b.Property<int>("reservationId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("reservationId"));
 
                     b.Property<int>("customerId")
                         .HasColumnType("int");
@@ -446,7 +464,7 @@ namespace RestaurantReservation.Db.Migrations
 
                     b.HasIndex("tableId");
 
-                    b.ToTable("reservations");
+                    b.ToTable("Reservations");
 
                     b.HasData(
                         new
@@ -454,7 +472,7 @@ namespace RestaurantReservation.Db.Migrations
                             reservationId = 1,
                             customerId = 1,
                             partySize = 4,
-                            reservationDate = new DateTime(2023, 12, 21, 19, 11, 26, 742, DateTimeKind.Local).AddTicks(1945),
+                            reservationDate = new DateTime(2023, 12, 22, 20, 25, 51, 688, DateTimeKind.Local).AddTicks(7699),
                             restaurantId = 1,
                             tableId = 1
                         },
@@ -463,7 +481,7 @@ namespace RestaurantReservation.Db.Migrations
                             reservationId = 2,
                             customerId = 2,
                             partySize = 2,
-                            reservationDate = new DateTime(2023, 12, 21, 19, 11, 26, 742, DateTimeKind.Local).AddTicks(1959),
+                            reservationDate = new DateTime(2023, 12, 22, 20, 25, 51, 688, DateTimeKind.Local).AddTicks(7715),
                             restaurantId = 2,
                             tableId = 2
                         },
@@ -472,7 +490,7 @@ namespace RestaurantReservation.Db.Migrations
                             reservationId = 3,
                             customerId = 3,
                             partySize = 6,
-                            reservationDate = new DateTime(2023, 12, 21, 21, 11, 26, 742, DateTimeKind.Local).AddTicks(1962),
+                            reservationDate = new DateTime(2023, 12, 22, 22, 25, 51, 688, DateTimeKind.Local).AddTicks(7718),
                             restaurantId = 1,
                             tableId = 3
                         },
@@ -481,7 +499,7 @@ namespace RestaurantReservation.Db.Migrations
                             reservationId = 4,
                             customerId = 1,
                             partySize = 1,
-                            reservationDate = new DateTime(2023, 12, 21, 22, 11, 26, 742, DateTimeKind.Local).AddTicks(1965),
+                            reservationDate = new DateTime(2023, 12, 22, 23, 25, 51, 688, DateTimeKind.Local).AddTicks(7720),
                             restaurantId = 2,
                             tableId = 2
                         },
@@ -490,7 +508,7 @@ namespace RestaurantReservation.Db.Migrations
                             reservationId = 5,
                             customerId = 2,
                             partySize = 4,
-                            reservationDate = new DateTime(2023, 12, 21, 20, 11, 26, 742, DateTimeKind.Local).AddTicks(1967),
+                            reservationDate = new DateTime(2023, 12, 22, 21, 25, 51, 688, DateTimeKind.Local).AddTicks(7722),
                             restaurantId = 1,
                             tableId = 5
                         });
@@ -499,7 +517,10 @@ namespace RestaurantReservation.Db.Migrations
             modelBuilder.Entity("RestaurantReservation.Db.Models.Restaurant", b =>
                 {
                     b.Property<int>("RestaurantId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RestaurantId"));
 
                     b.Property<string>("address")
                         .IsRequired()
@@ -519,7 +540,7 @@ namespace RestaurantReservation.Db.Migrations
 
                     b.HasKey("RestaurantId");
 
-                    b.ToTable("restaurants");
+                    b.ToTable("Restaurants");
 
                     b.HasData(
                         new
@@ -543,7 +564,10 @@ namespace RestaurantReservation.Db.Migrations
             modelBuilder.Entity("RestaurantReservation.Db.Models.Table", b =>
                 {
                     b.Property<int>("tableId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("tableId"));
 
                     b.Property<int>("capacity")
                         .HasColumnType("int");
@@ -555,7 +579,7 @@ namespace RestaurantReservation.Db.Migrations
 
                     b.HasIndex("restaurantId");
 
-                    b.ToTable("tables");
+                    b.ToTable("Tables");
 
                     b.HasData(
                         new

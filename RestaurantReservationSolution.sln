@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestaurantReservation", "Re
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestaurantReservation.Db", "RestaurantReservation.Db\RestaurantReservation.Db.csproj", "{B2609104-E3DC-4F9F-AA8A-D371392D7545}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantReservation.Test", "RestaurantReservation.Test\RestaurantReservation.Test.csproj", "{9E449F93-139F-487E-B7B4-7E28A325768B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{B2609104-E3DC-4F9F-AA8A-D371392D7545}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B2609104-E3DC-4F9F-AA8A-D371392D7545}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B2609104-E3DC-4F9F-AA8A-D371392D7545}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E449F93-139F-487E-B7B4-7E28A325768B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E449F93-139F-487E-B7B4-7E28A325768B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E449F93-139F-487E-B7B4-7E28A325768B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E449F93-139F-487E-B7B4-7E28A325768B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

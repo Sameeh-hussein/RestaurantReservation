@@ -6,6 +6,7 @@ namespace RestaurantReservation.Db
 {
     public class RestaurantReservationDbContext: DbContext
     {
+
         public DbSet<Restaurant> Restaurants {  get; set; }
         public DbSet<Reservation> Reservations { get; set;}
         public DbSet<Customer> Customers { get; set; }
@@ -37,10 +38,6 @@ namespace RestaurantReservation.Db
                 .HasKey(x => x.orderId);
 
             modelBuilder.Entity<Order>()
-                .Property(x => x.orderId)
-                .ValueGeneratedNever();
-
-            modelBuilder.Entity<Order>()
                 .HasOne(t => t.reservation)
                 .WithMany(r => r.orders)
                 .HasForeignKey(t => t.reservationId);
@@ -59,20 +56,12 @@ namespace RestaurantReservation.Db
                 .HasKey(x => x.customerId);
 
             modelBuilder.Entity<Customer>()
-                .Property(x => x.customerId)
-                .ValueGeneratedNever();
-
-            modelBuilder.Entity<Customer>()
                 .HasData(SeedCustomersData());
 
 
 
             modelBuilder.Entity<MenuItems>()
                 .HasKey(x => x.menuItemId);
-
-            modelBuilder.Entity<MenuItems>()
-                .Property(x => x.menuItemId)
-                .ValueGeneratedNever();
 
             modelBuilder.Entity<MenuItems>()
                 .HasOne(t => t.Restaurant)
@@ -88,10 +77,6 @@ namespace RestaurantReservation.Db
                 .HasKey(x => x.employeeId);
 
             modelBuilder.Entity<Employee>()
-                .Property(x => x.employeeId)
-                .ValueGeneratedNever();
-
-            modelBuilder.Entity<Employee>()
                 .HasOne(t => t.Restaurant)
                 .WithMany(r => r.employees)
                 .HasForeignKey(t => t.restaurantId);
@@ -103,10 +88,6 @@ namespace RestaurantReservation.Db
 
             modelBuilder.Entity<OrderItems>()
                 .HasKey(x => x.orderItemId);
-
-            modelBuilder.Entity<OrderItems>()
-                .Property(x => x.orderItemId)
-                .ValueGeneratedNever();
 
             modelBuilder.Entity<OrderItems>()
                 .HasOne(t => t.Order)
@@ -125,10 +106,6 @@ namespace RestaurantReservation.Db
 
             modelBuilder.Entity<Reservation>()
                 .HasKey(x => x.reservationId);
-
-            modelBuilder.Entity<Reservation>()
-                .Property(x => x.reservationId)
-                .ValueGeneratedNever();
 
             modelBuilder.Entity<Reservation>()
                 .HasOne(t => t.restaurant)
@@ -154,20 +131,12 @@ namespace RestaurantReservation.Db
                 .HasKey(x => x.RestaurantId);
 
             modelBuilder.Entity<Restaurant>()
-                .Property(x => x.RestaurantId)
-                .ValueGeneratedNever();
-
-            modelBuilder.Entity<Restaurant>()
                 .HasData(SeedRestaurabtsData());
 
 
 
             modelBuilder.Entity<Table>()
                 .HasKey(x => x.tableId);
-
-            modelBuilder.Entity<Table>()
-                .Property(x => x.tableId)
-                .ValueGeneratedNever();
 
             modelBuilder.Entity<Table>()
                 .HasOne(t => t.Restaurant)           
