@@ -41,6 +41,11 @@ namespace RestaurantReservation.Db.Repositories.Implementaion
             }
         }
 
+        public async Task<MenuItems> GetMenuItemById(int menuItemsId)
+        {
+            return await _Context.MenuItems.FindAsync(menuItemsId);
+        }
+
         public async Task<List<MenuItems>> ListOrderedMenuItems(int reservationId)
         {
             var reservation = await _Context.Reservations
