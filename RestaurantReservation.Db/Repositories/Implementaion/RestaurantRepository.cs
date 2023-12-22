@@ -1,8 +1,8 @@
 ﻿using RestaurantReservation.Db.Models;
 
-namespace RestaurantReservation.Db.Repositories
+namespace RestaurantReservation.Db.Repositories.Implementaion
 {
-    public class RestaurantRepository : IRepository<Restaurant>
+    public class RestaurantRepository : IRestaurantRepository
     {
         private readonly RestaurantReservationDbContext _Context;
 

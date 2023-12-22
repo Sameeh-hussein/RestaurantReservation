@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using RestaurantReservation.Db;
-using RestaurantReservation.Db.Repositories;
+using RestaurantReservation.Db.Repositories.Implementaion;
 using System.Reflection;
 
 namespace RestaurantReservation

@@ -2,9 +2,9 @@
 using RestaurantReservation.Db.Models;
 using System.Reflection.Metadata.Ecma335;
 
-namespace RestaurantReservation.Db.Repositories
+namespace RestaurantReservation.Db.Repositories.Implementaion
 {
-    public class EmployeeRepository : IRepository<Employee>
+    public class EmployeeRepository : IEmployeeRepository
     {
         private readonly RestaurantReservationDbContext _Context;
 
@@ -55,7 +55,7 @@ namespace RestaurantReservation.Db.Repositories
                                          .Include(e => e.orders)
                                          .FirstOrDefaultAsync(e => e.employeeId == employeeId);
 
-            if(employee == null)
+            if (employee == null)
             {
                 return -1.0m;
             }

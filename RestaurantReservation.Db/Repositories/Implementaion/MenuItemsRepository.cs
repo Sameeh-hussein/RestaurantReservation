@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RestaurantReservation.Db.Models;
 
-namespace RestaurantReservation.Db.Repositories
+namespace RestaurantReservation.Db.Repositories.Implementaion
 {
-    public class MenuItemsRepository : IRepository<MenuItems>
+    public class MenuItemsRepository : IMenuItemsRepository
     {
         private readonly RestaurantReservationDbContext _Context;
 
@@ -49,7 +49,7 @@ namespace RestaurantReservation.Db.Repositories
                                             .ThenInclude(oi => oi.menuItems)
                                     .FirstOrDefaultAsync(r => r.reservationId == reservationId);
 
-            if(reservation == null)
+            if (reservation == null)
             {
                 return new List<MenuItems>();
             }
@@ -73,10 +73,10 @@ namespace RestaurantReservation.Db.Repositories
                 return;
             }
 
-            foreach(var order in reservation.orders)
+            foreach (var order in reservation.orders)
             {
                 Console.WriteLine($"Order id : {order.orderId}, its menu items id :");
-                foreach(var orderItem in order.OrderItems)
+                foreach (var orderItem in order.OrderItems)
                 {
                     Console.WriteLine(orderItem.menuItems.menuItemId);
                 }
