@@ -2,10 +2,8 @@
 
 namespace RestaurantReservation.Db.Repositories
 {
-    public interface IOrderItemsRepository
+    public interface IOrderItemsRepository: IRepository<OrderItems>
     {
-        Task<OrderItems> Create(OrderItems orderItems);
-        Task<bool> Delete(int id);
-        Task<OrderItems> Update(OrderItems orderItems);
+
     }
 }
