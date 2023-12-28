@@ -4,8 +4,7 @@ using Moq;
 using RestaurantReservation.Db;
 using RestaurantReservation.Db.Models;
 using RestaurantReservation.Db.Repositories;
-using RestaurantReservation.Services;
-using System.Collections.Generic;
+using RestaurantReservation.Db.Services.Implementaion;
 
 namespace RestaurantReservation.Test
 {
@@ -49,7 +48,7 @@ namespace RestaurantReservation.Test
         [Fact]
         public async Task CreateMenuItem_Should_ThrowException_WhenPassNull()
         {
-            MenuItems menuItem = null; 
+            MenuItems? menuItem = null; 
 
             await Assert.ThrowsAsync<ArgumentNullException>(async () => await sut.CreateMenuItem(menuItem));
 
@@ -94,7 +93,7 @@ namespace RestaurantReservation.Test
         [Fact]
         public async Task UpdateMenuItem_Should_ThrowException_WhenPassNull()
         {
-            MenuItems menuItem = null;
+            MenuItems? menuItem = null;
 
             await Assert.ThrowsAsync<ArgumentNullException>(async () => await sut.UpdateMenuItem(menuItem));
 
