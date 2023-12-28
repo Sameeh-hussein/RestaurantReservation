@@ -3,42 +3,13 @@ using RestaurantReservation.Db.Models;
 
 namespace RestaurantReservation.Db.Repositories.Implementaion
 {
-    public class MenuItemsRepository : IMenuItemsRepository
+    public class MenuItemsRepository : Repository<MenuItems>
     {
         private readonly RestaurantReservationDbContext _Context;
 
-        public MenuItemsRepository(RestaurantReservationDbContext context)
+        public MenuItemsRepository(RestaurantReservationDbContext context) : base(context) 
         {
             _Context = context;
-        }
-
-        public async Task<MenuItems> Create(MenuItems menuItems)
-        {
-            _Context.MenuItems.Add(menuItems);
-            await _Context.SaveChangesAsync();
-            return menuItems;
-        }
-
-        public async Task<MenuItems> Update(MenuItems menuItems)
-        {
-            _Context.MenuItems.Update(menuItems);
-            await _Context.SaveChangesAsync();
-            return menuItems;
-        }
-
-        public async Task<bool> Delete(int id)
-        {
-            var menuItems = await _Context.MenuItems.FindAsync(id);
-            if (menuItems != null)
-            {
-                _Context.MenuItems.Remove(menuItems);
-                await _Context.SaveChangesAsync();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
         }
 
         public async Task<MenuItems> GetMenuItemById(int menuItemsId)

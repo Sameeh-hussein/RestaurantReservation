@@ -4,42 +4,13 @@ using System.Reflection.Metadata.Ecma335;
 
 namespace RestaurantReservation.Db.Repositories.Implementaion
 {
-    public class EmployeeRepository : IEmployeeRepository
+    public class EmployeeRepository : Repository<Employee>
     {
         private readonly RestaurantReservationDbContext _Context;
 
-        public EmployeeRepository(RestaurantReservationDbContext context)
+        public EmployeeRepository(RestaurantReservationDbContext context) : base(context) 
         {
             _Context = context;
-        }
-
-        public async Task<Employee> Create(Employee employee)
-        {
-            _Context.Employees.Add(employee);
-            await _Context.SaveChangesAsync();
-            return employee;
-        }
-
-        public async Task<Employee> Update(Employee employee)
-        {
-            _Context.Employees.Update(employee);
-            await _Context.SaveChangesAsync();
-            return employee;
-        }
-
-        public async Task<bool> Delete(int id)
-        {
-            var employee = await _Context.Employees.FindAsync(id);
-            if (employee != null)
-            {
-                _Context.Employees.Remove(employee);
-                await _Context.SaveChangesAsync();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
         }
 
         public async Task<List<Employee>> ListManagers()
