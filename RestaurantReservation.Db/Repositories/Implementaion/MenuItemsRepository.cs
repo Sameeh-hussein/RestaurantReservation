@@ -3,21 +3,55 @@ using RestaurantReservation.Db.Models;
 
 namespace RestaurantReservation.Db.Repositories.Implementaion
 {
-    public class MenuItemsRepository : Repository<MenuItems>
+    public class MenuItemsRepository : IMenuItemsRepository
     {
         private readonly RestaurantReservationDbContext _Context;
 
-        public MenuItemsRepository(RestaurantReservationDbContext context) : base(context) 
+        public MenuItemsRepository(RestaurantReservationDbContext context)
         {
             _Context = context;
         }
 
-        public async Task<MenuItems> GetMenuItemById(int menuItemsId)
+        public async Task<IEnumerable<MenuItems>> GetAllAsync()
         {
-            return await _Context.MenuItems.FindAsync(menuItemsId);
+            return await _Context.MenuItems.ToListAsync();
         }
 
-        public async Task<List<MenuItems>> ListOrderedMenuItems(int reservationId)
+        public async Task<MenuItems?> GetByIdAsync(int id)
+        {
+            return await _Context.MenuItems.FirstOrDefaultAsync(c => c.menuItemId == id);
+        }
+
+        public async Task<MenuItems> CreateAsync(MenuItems menuItems)
+        {
+            _Context.MenuItems.Add(menuItems);
+            await _Context.SaveChangesAsync();
+            return menuItems;
+        }
+
+        public async Task<MenuItems> UpdateAsync(MenuItems menuItems)
+        {
+            _Context.MenuItems.Update(menuItems);
+            await _Context.SaveChangesAsync();
+            return menuItems;
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var menuItems = await _Context.MenuItems.FindAsync(id);
+            if (menuItems != null)
+            {
+                _Context.MenuItems.Remove(menuItems);
+                await _Context.SaveChangesAsync();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task<List<MenuItems>> ListOrderedMenuItemsAsync(int reservationId)
         {
             var reservation = await _Context.Reservations
                                     .Include(r => r.orders)
@@ -36,7 +70,7 @@ namespace RestaurantReservation.Db.Repositories.Implementaion
                               .ToList();
         }
 
-        public async Task ListOrdersAndMenuItems(int reservationId)
+        public async Task ListOrdersAndMenuItemsAsync(int reservationId)
         {
             var reservation = await _Context.Reservations
                                     .Include(r => r.orders)

@@ -1,18 +1,58 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RestaurantReservation.Db.Models;
+using RestaurantReservation.Db.Services.Implementaion;
 
 namespace RestaurantReservation.Db.Repositories.Implementaion
 {
-    public class ReservationRepository : Repository<Reservation>
+    public class ReservationRepository : IReservationRepository
     {
         private readonly RestaurantReservationDbContext _Context;
 
-        public ReservationRepository(RestaurantReservationDbContext context) : base(context) 
+        public ReservationRepository(RestaurantReservationDbContext context)
         {
             _Context = context;
         }
 
-        public async Task<List<Reservation>> GetReservationsByCustomer(int id)
+        public async Task<IEnumerable<Reservation>> GetAllAsync()
+        {
+            return await _Context.Reservations.ToListAsync();
+        }
+
+        public async Task<Reservation?> GetByIdAsync(int id)
+        {
+            return await _Context.Reservations.FirstOrDefaultAsync(c => c.reservationId == id);
+        }
+
+        public async Task<Reservation> CreateAsync(Reservation reservation)
+        {
+            _Context.Reservations.Add(reservation);
+            await _Context.SaveChangesAsync();
+            return reservation;
+        }
+
+        public async Task<Reservation> UpdateAsync(Reservation reservation)
+        {
+            _Context.Reservations.Update(reservation);
+            await _Context.SaveChangesAsync();
+            return reservation;
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var reservation = await _Context.Reservations.FindAsync(id);
+            if (reservation != null)
+            {
+                _Context.Reservations.Remove(reservation);
+                await _Context.SaveChangesAsync();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public async Task<List<Reservation>> GetReservationsByCustomerAsync(int id)
         {
             return await _Context.Reservations.Where(r => r.customerId == id)
                                               .ToListAsync();

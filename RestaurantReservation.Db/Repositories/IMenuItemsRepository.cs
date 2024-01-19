@@ -2,10 +2,14 @@
 
 namespace RestaurantReservation.Db.Repositories
 {
-    public interface IMenuItemsRepository: IRepository<MenuItems>
+    public interface IMenuItemsRepository
     {
-        Task<MenuItems> GetMenuItemById(int menuItemsId);
-        Task<List<MenuItems>> ListOrderedMenuItems(int reservationId);
-        Task ListOrdersAndMenuItems(int reservationId);
+        Task<IEnumerable<MenuItems>> GetAllAsync();
+        Task<MenuItems?> GetByIdAsync(int id);
+        Task<MenuItems> CreateAsync(MenuItems menuItems);
+        Task<bool> DeleteAsync(int id);
+        Task<List<MenuItems>> ListOrderedMenuItemsAsync(int reservationId);
+        Task ListOrdersAndMenuItemsAsync(int reservationId);
+        Task<MenuItems> UpdateAsync(MenuItems menuItems);
     }
 }
