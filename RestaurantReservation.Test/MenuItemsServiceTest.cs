@@ -33,16 +33,16 @@ namespace RestaurantReservation.Test
                 price = price
             };
 
-            _repositoryMock.Setup(repo => repo.Create(menuItem)).ReturnsAsync(menuItem);
+            _repositoryMock.Setup(repo => repo.CreateAsync(menuItem)).ReturnsAsync(menuItem);
 
-            var result = await sut.CreateMenuItem(menuItem);
+            var result = await sut.CreateAsync(menuItem);
 
             Assert.NotNull(result);
             Assert.Equal(menuItem.menuItemId, result.menuItemId);
             Assert.Equal(menuItem.name, result.name);
             Assert.Equal(menuItem.description, result.description);
             Assert.Equal(menuItem.price, result.price);
-            _repositoryMock.Verify(x => x.Create(menuItem), Times.Once);
+            _repositoryMock.Verify(x => x.CreateAsync(menuItem), Times.Once);
         }
 
         [Fact]
@@ -50,9 +50,9 @@ namespace RestaurantReservation.Test
         {
             MenuItems? menuItem = null; 
 
-            await Assert.ThrowsAsync<ArgumentNullException>(async () => await sut.CreateMenuItem(menuItem));
+            await Assert.ThrowsAsync<ArgumentNullException>(async () => await sut.CreateAsync(menuItem));
 
-            _repositoryMock.Verify(x => x.Create(It.IsAny<MenuItems>()), Times.Never);
+            _repositoryMock.Verify(x => x.CreateAsync(It.IsAny<MenuItems>()), Times.Never);
         }
 
         [Theory]
@@ -78,16 +78,16 @@ namespace RestaurantReservation.Test
                 price = newPrice
             };
 
-            _repositoryMock.Setup(repo => repo.Update(menuItem)).ReturnsAsync(newMenuItem);
+            _repositoryMock.Setup(repo => repo.UpdateAsync(menuItem)).ReturnsAsync(newMenuItem);
 
-            var result = await sut.UpdateMenuItem(menuItem);
+            var result = await sut.UpdateAsync(menuItem);
 
             Assert.NotNull(result);
             Assert.Equal(newMenuItem.menuItemId, result.menuItemId);
             Assert.Equal(newMenuItem.name, result.name);
             Assert.Equal(newMenuItem.description, result.description);
             Assert.Equal(newMenuItem.price, result.price);
-            _repositoryMock.Verify(x => x.Update(menuItem), Times.Once);
+            _repositoryMock.Verify(x => x.UpdateAsync(menuItem), Times.Once);
         }
 
         [Fact]
@@ -95,9 +95,9 @@ namespace RestaurantReservation.Test
         {
             MenuItems? menuItem = null;
 
-            await Assert.ThrowsAsync<ArgumentNullException>(async () => await sut.UpdateMenuItem(menuItem));
+            await Assert.ThrowsAsync<ArgumentNullException>(async () => await sut.UpdateAsync(menuItem));
 
-            _repositoryMock.Verify(x => x.Update(It.IsAny<MenuItems>()), Times.Never);
+            _repositoryMock.Verify(x => x.UpdateAsync(It.IsAny<MenuItems>()), Times.Never);
         }
 
     }

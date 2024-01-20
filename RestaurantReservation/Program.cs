@@ -14,7 +14,7 @@ namespace RestaurantReservation
             {
                 var menuItemsRepository = new MenuItemsRepository(context);
 
-                await menuItemsRepository.ListOrdersAndMenuItems(2);
+                await menuItemsRepository.ListOrdersAndMenuItemsAsync(2);
             }
         }
     }
