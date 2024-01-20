@@ -2,8 +2,13 @@
 
 namespace RestaurantReservation.Db.Services
 {
-    public interface IReservationService : IService<Reservation>
+    public interface IReservationService
     {
-
+        Task<IEnumerable<Reservation>> GetAllAsync();
+        Task<Reservation?> GetByIdAsync(int id);
+        Task<Reservation> CreateAsync(Reservation reservation);
+        Task<bool> DeleteAsync(int Id);
+        Task<Reservation> UpdateAsync(Reservation reservation);
+        Task<List<Reservation>> GetReservationsByCustomerAsync(int id);
     }
 }

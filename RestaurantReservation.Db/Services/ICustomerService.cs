@@ -7,8 +7,12 @@ using System.Threading.Tasks;
 
 namespace RestaurantReservation.Db.Services
 {
-    public interface ICustomerService: IService<Customer>
+    public interface ICustomerService
     {
-
+        Task<IEnumerable<Customer>> GetAllAsync();
+        Task<Customer?> GetByIdAsync(int id);
+        Task<Customer> CreateAsync(Customer customer);
+        Task<bool> DeleteAsync(int Id);
+        Task<Customer> UpdateAsync(Customer customer);
     }
 }

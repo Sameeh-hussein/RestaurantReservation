@@ -6,29 +6,54 @@ using RestaurantReservation.Db.Repositories;
 
 namespace RestaurantReservation.Db.Services.Implementaion
 {
-    public class MenuItemsService : Service<MenuItems>
+    public class MenuItemsService : IMenuItemsService
     {
-        private readonly IMenuItemsRepository _menuItemsRepository;
+        private readonly IMenuItemsRepository _repository;
 
-        public MenuItemsService(IMenuItemsRepository menuItemsRepository)
-            : base(menuItemsRepository) // Ensure the base constructor is called
+        public MenuItemsService(IMenuItemsRepository repository)
         {
-            _menuItemsRepository = menuItemsRepository ?? throw new ArgumentNullException(nameof(menuItemsRepository));
+            _repository = repository;
         }
 
-        public async Task<MenuItems> GetMenuItemById(int menuItemsId)
+        public async Task<IEnumerable<MenuItems>> GetAllAsync()
         {
-            return await _menuItemsRepository.GetMenuItemById(menuItemsId);
+            return await _repository.GetAllAsync();
         }
 
-        public async Task<List<MenuItems>> ListOrderedMenuItems(int reservationId)
+        public async Task<MenuItems?> GetByIdAsync(int id)
         {
-            return await _menuItemsRepository.ListOrderedMenuItems(reservationId);
+            return await _repository.GetByIdAsync(id);
         }
 
-        public async Task ListOrdersAndMenuItems(int reservationId)
+        public async Task<MenuItems> CreateAsync(MenuItems menuItems)
         {
-            await _menuItemsRepository.ListOrdersAndMenuItems(reservationId);
+            if (menuItems == null)
+                throw new ArgumentNullException(nameof(menuItems), "cannot be null.");
+
+            return await _repository.CreateAsync(menuItems);
+        }
+
+        public async Task<MenuItems> UpdateAsync(MenuItems menuItems)
+        {
+            if (menuItems == null)
+                throw new ArgumentNullException(nameof(menuItems), "cannot be null.");
+
+            return await _repository.UpdateAsync(menuItems);
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            return await _repository.DeleteAsync(id);
+        }
+
+        public async Task<List<MenuItems>> ListOrderedMenuItemsAsync(int Id)
+        {
+            return await _repository.ListOrderedMenuItemsAsync(Id);
+        }
+
+        public async Task ListOrdersAndMenuItemsAsync(int reservationId)
+        {
+            await _repository.ListOrdersAndMenuItemsAsync(reservationId);
         }
     }
 }

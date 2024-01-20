@@ -9,24 +9,55 @@ using System.Threading.Tasks;
 
 namespace RestaurantReservation.Db.Services.Implementaion
 {
-    public class EmployeeService : Service<Employee>
+    public class EmployeeService : IEmployeeService
     {
-        private readonly IEmployeeRepository _employeeRepository;
+        private readonly IEmployeeRepository _repository;
 
-        public EmployeeService(IEmployeeRepository employeeRepository)
-            : base(employeeRepository) // Ensure the base constructor is called
+
+        public EmployeeService(IEmployeeRepository repository)
         {
-            _employeeRepository = _employeeRepository ?? throw new ArgumentNullException(nameof(employeeRepository));
+            _repository = repository;
         }
 
-        public async Task<decimal> CalculateAverageOrderAmount(int employeeId)
+        public async Task<IEnumerable<Employee>> GetAllAsync()
         {
-            return await _employeeRepository.CalculateAverageOrderAmount(employeeId);
+            return await _repository.GetAllAsync();
         }
 
-        public async Task ListOrderedMenuItems()
+        public async Task<Employee?> GetByIdAsync(int id)
         {
-            await _employeeRepository.ListManagers();
+            return await _repository.GetByIdAsync(id);
+        }
+
+        public async Task<Employee> CreateAsync(Employee employee)
+        {
+            if (employee == null)
+                throw new ArgumentNullException(nameof(employee), "cannot be null.");
+
+            return await _repository.CreateAsync(employee);
+        }
+
+        public async Task<Employee> UpdateAsync(Employee employee)
+        {
+            if (employee == null)
+                throw new ArgumentNullException(nameof(employee), "cannot be null.");
+
+            return await _repository.UpdateAsync(employee);
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            return await _repository.DeleteAsync(id);
+        }
+
+        public async Task<decimal> CalculateAverageOrderAmountAsync(int employeeId)
+        {
+            return await _repository.CalculateAverageOrderAmountAsync(employeeId);
+        }
+
+        public async Task<List<Employee>> ListManagersAsync()
+        {
+            return await _repository.ListManagersAsync();
         }
     }
 
