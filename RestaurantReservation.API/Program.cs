@@ -1,4 +1,8 @@
 using RestaurantReservation.Db;
+using RestaurantReservation.Db.Repositories;
+using RestaurantReservation.Db.Repositories.Implementaion;
+using RestaurantReservation.Db.Services;
+using RestaurantReservation.Db.Services.Implementaion;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +13,13 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddTransient<ICustomerRepository, CustomerRepository>();
+builder.Services.AddTransient<ICustomerService, CustomerService>();
+
 builder.Services.AddDbContext<RestaurantReservationDbContext>();
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 
 var app = builder.Build();
 
