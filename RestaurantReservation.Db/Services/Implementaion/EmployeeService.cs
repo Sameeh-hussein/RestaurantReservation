@@ -45,9 +45,9 @@ namespace RestaurantReservation.Db.Services.Implementaion
             return await _repository.UpdateAsync(employee);
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task DeleteAsync(Employee employee)
         {
-            return await _repository.DeleteAsync(id);
+            await _repository.DeleteAsync(employee);
         }
 
         public async Task<decimal> CalculateAverageOrderAmountAsync(int employeeId)

@@ -37,19 +37,10 @@ namespace RestaurantReservation.Db.Repositories.Implementaion
             return employee;
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task DeleteAsync(Employee employee)
         {
-            var employee = await _Context.Employees.FindAsync(id);
-            if (employee != null)
-            {
-                _Context.Employees.Remove(employee);
-                await _Context.SaveChangesAsync();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            _Context.Employees.Remove(employee);
+            await _Context.SaveChangesAsync();
         }
 
         public async Task<List<Employee>> ListManagersAsync()
@@ -68,6 +59,11 @@ namespace RestaurantReservation.Db.Repositories.Implementaion
             if (employee == null)
             {
                 return -1.0m;
+            }
+
+            if (employee.orders == null || !employee.orders.Any())
+            {
+                return 0m;
             }
 
             return employee.orders
