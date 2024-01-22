@@ -12,19 +12,22 @@ namespace RestaurantReservation.Db.Repositories.Implementaion
             _Context = context;
         }
 
-        public async Task<IEnumerable<MenuItems>> GetAllAsync()
+        public async Task<IEnumerable<MenuItems>> GetMenuItemsInRestaurantAsync(int restaurantId)
         {
-            return await _Context.MenuItems.ToListAsync();
+            return await _Context.MenuItems.Where(mi => mi.restaurantId == restaurantId)
+                                           .ToListAsync();
         }
 
-        public async Task<MenuItems?> GetByIdAsync(int id)
+        public async Task<MenuItems?> GetMenuItemInRestaurantAsync(int restaurantId, int menuItemId)
         {
-            return await _Context.MenuItems.FirstOrDefaultAsync(c => c.menuItemId == id);
+            return await _Context.MenuItems
+                                 .FirstOrDefaultAsync(mi => mi.restaurantId == restaurantId && mi.menuItemId == menuItemId);
         }
 
-        public async Task<MenuItems> CreateAsync(MenuItems menuItems)
+        public async Task<MenuItems> CreateAsync(int restaurantId, MenuItems menuItems)
         {
             _Context.MenuItems.Add(menuItems);
+            menuItems.restaurantId = restaurantId;
             await _Context.SaveChangesAsync();
             return menuItems;
         }
@@ -36,19 +39,10 @@ namespace RestaurantReservation.Db.Repositories.Implementaion
             return menuItems;
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task DeleteAsync(MenuItems menuItems)
         {
-            var menuItems = await _Context.MenuItems.FindAsync(id);
-            if (menuItems != null)
-            {
-                _Context.MenuItems.Remove(menuItems);
-                await _Context.SaveChangesAsync();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            _Context.MenuItems.Remove(menuItems);
+            await _Context.SaveChangesAsync();
         }
 
         public async Task<List<MenuItems>> ListOrderedMenuItemsAsync(int reservationId)
