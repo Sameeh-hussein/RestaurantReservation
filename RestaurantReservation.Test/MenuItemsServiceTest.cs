@@ -33,16 +33,16 @@ namespace RestaurantReservation.Test
                 price = price
             };
 
-            _repositoryMock.Setup(repo => repo.CreateAsync(menuItem)).ReturnsAsync(menuItem);
+            _repositoryMock.Setup(repo => repo.CreateAsync(1, menuItem)).ReturnsAsync(menuItem);
 
-            var result = await sut.CreateAsync(menuItem);
+            var result = await sut.CreateAsync(1,menuItem);
 
             Assert.NotNull(result);
             Assert.Equal(menuItem.menuItemId, result.menuItemId);
             Assert.Equal(menuItem.name, result.name);
             Assert.Equal(menuItem.description, result.description);
             Assert.Equal(menuItem.price, result.price);
-            _repositoryMock.Verify(x => x.CreateAsync(menuItem), Times.Once);
+            _repositoryMock.Verify(x => x.CreateAsync(1, menuItem), Times.Once);
         }
 
         [Fact]
@@ -50,9 +50,9 @@ namespace RestaurantReservation.Test
         {
             MenuItems? menuItem = null; 
 
-            await Assert.ThrowsAsync<ArgumentNullException>(async () => await sut.CreateAsync(menuItem));
+            await Assert.ThrowsAsync<ArgumentNullException>(async () => await sut.CreateAsync(1, menuItem));
 
-            _repositoryMock.Verify(x => x.CreateAsync(It.IsAny<MenuItems>()), Times.Never);
+            _repositoryMock.Verify(x => x.CreateAsync(1, It.IsAny<MenuItems>()), Times.Never);
         }
 
         [Theory]
