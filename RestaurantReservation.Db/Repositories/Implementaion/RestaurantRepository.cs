@@ -36,19 +36,10 @@ namespace RestaurantReservation.Db.Repositories.Implementaion
             return restaurant;
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task DeleteAsync(Restaurant restaurant)
         {
-            var restaurant = await _Context.Restaurants.FindAsync(id);
-            if (restaurant != null)
-            {
-                _Context.Restaurants.Remove(restaurant);
-                await _Context.SaveChangesAsync();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            _Context.Restaurants.Remove(restaurant);
+            await _Context.SaveChangesAsync();
         }
     }
 }

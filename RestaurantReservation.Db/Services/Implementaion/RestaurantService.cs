@@ -38,9 +38,9 @@ namespace RestaurantReservation.Db.Services.Implementaion
             return await _repository.UpdateAsync(restaurant);
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task DeleteAsync(Restaurant restaurant)
         {
-            return await _repository.DeleteAsync(id);
+            await _repository.DeleteAsync(restaurant);
         }
     }
 

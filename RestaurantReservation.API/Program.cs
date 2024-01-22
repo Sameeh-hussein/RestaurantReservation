@@ -19,6 +19,9 @@ builder.Services.AddTransient<ICustomerService, CustomerService>();
 builder.Services.AddTransient<IEmployeeRepository, EmployeeRepository>();
 builder.Services.AddTransient<IEmployeeService, EmployeeService>();
 
+builder.Services.AddTransient<IRestaurantRepository, RestaurantRepository>();
+builder.Services.AddTransient<IRestaurantService, RestaurantService>();
+
 builder.Services.AddDbContext<RestaurantReservationDbContext>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
