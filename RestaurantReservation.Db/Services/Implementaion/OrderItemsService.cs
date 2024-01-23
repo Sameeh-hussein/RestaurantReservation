@@ -3,7 +3,7 @@ using RestaurantReservation.Db.Repositories;
 
 namespace RestaurantReservation.Db.Services.Implementaion
 {
-    public class OrderItemsService
+    public class OrderItemsService: IOrderItemsService
     {
         private readonly IOrderItemsRepository _repository;
 
@@ -12,22 +12,22 @@ namespace RestaurantReservation.Db.Services.Implementaion
             _repository = repository;
         }
 
-        public async Task<IEnumerable<OrderItems>> GetAllAsync()
+        public async Task<IEnumerable<OrderItems>> GetAllOrderItemsInOrderAsync(int orderid)
         {
-            return await _repository.GetAllAsync();
+            return await _repository.GetAllOrderItemsInOrderAsync(orderid);
         }
 
-        public async Task<OrderItems?> GetByIdAsync(int id)
+        public async Task<OrderItems?> GetOrderItemsInOrderByIdAsync(int orderId, int orderItemsId)
         {
-            return await _repository.GetByIdAsync(id);
+            return await _repository.GetOrderItemsInOrderByIdAsync(orderId, orderItemsId);
         }
 
-        public async Task<OrderItems> CreateAsync(OrderItems orderItems)
+        public async Task<OrderItems> CreateOrderItemsInOrderAsync(int orderId, OrderItems orderItems)
         {
             if (orderItems == null)
                 throw new ArgumentNullException(nameof(orderItems), "cannot be null.");
 
-            return await _repository.CreateAsync(orderItems);
+            return await _repository.CreateOrderItemsInOrderAsync(orderId, orderItems);
         }
 
         public async Task<OrderItems> UpdateAsync(OrderItems orderItems)
@@ -38,9 +38,9 @@ namespace RestaurantReservation.Db.Services.Implementaion
             return await _repository.UpdateAsync(orderItems);
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task DeleteAsync(OrderItems orderItems)
         {
-            return await _repository.DeleteAsync(id);
+            await _repository.DeleteAsync(orderItems);
         }
     }
 
