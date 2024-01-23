@@ -12,22 +12,22 @@ namespace RestaurantReservation.Db.Services.Implementaion
             _repository = repository;
         }
 
-        public async Task<IEnumerable<Order>> GetAllAsync()
+        public async Task<IEnumerable<Order>> GetAllOrderInReservationAsync(int reservationId)
         {
-            return await _repository.GetAllAsync();
+            return await _repository.GetAllOrderInReservationAsync(reservationId);
         }
 
-        public async Task<Order?> GetByIdAsync(int id)
+        public async Task<Order?> GetOrderByIdInReservationAsync(int reservationId, int orderId)
         {
-            return await _repository.GetByIdAsync(id);
+            return await _repository.GetOrderByIdInReservationAsync(reservationId, orderId);
         }
 
-        public async Task<Order> CreateAsync(Order order)
+        public async Task<Order> CreateOrderInReservationAsync(int reservationId, Order order)
         {
             if (order == null)
                 throw new ArgumentNullException(nameof(order), "cannot be null.");
 
-            return await _repository.CreateAsync(order);
+            return await _repository.CreateOrderInReservationAsync(reservationId, order);
         }
 
         public async Task<Order> UpdateAsync(Order order)
@@ -38,9 +38,9 @@ namespace RestaurantReservation.Db.Services.Implementaion
             return await _repository.UpdateAsync(order);
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task DeleteAsync(Order order)
         {
-            return await _repository.DeleteAsync(id);
+            await _repository.DeleteAsync(order);
         }
     }
 

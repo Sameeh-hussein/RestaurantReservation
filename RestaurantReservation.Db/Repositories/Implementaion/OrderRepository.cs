@@ -12,19 +12,21 @@ namespace RestaurantReservation.Db.Repositories.Implementaion
             _Context = context;
         }
 
-        public async Task<IEnumerable<Order>> GetAllAsync()
+        public async Task<IEnumerable<Order>> GetAllOrderInReservationAsync(int reservationId)
         {
-            return await _Context.Orders.ToListAsync();
+            return await _Context.Orders.Where(o => o.reservationId == reservationId)
+                                        .ToListAsync();
         }
 
-        public async Task<Order?> GetByIdAsync(int id)
+        public async Task<Order?> GetOrderByIdInReservationAsync(int reservationId, int orderId)
         {
-            return await _Context.Orders.FirstOrDefaultAsync(c => c.orderId == id);
+            return await _Context.Orders.FirstOrDefaultAsync(o => o.reservationId == reservationId && o.orderId == orderId);
         }
 
-        public async Task<Order> CreateAsync(Order order)
+        public async Task<Order> CreateOrderInReservationAsync(int reservationId, Order order)
         {
             _Context.Orders.Add(order);
+            order.reservationId = reservationId;
             await _Context.SaveChangesAsync();
             return order;
         }
@@ -36,19 +38,10 @@ namespace RestaurantReservation.Db.Repositories.Implementaion
             return order;
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task DeleteAsync(Order order)
         {
-            var order = await _Context.Orders.FindAsync(id);
-            if (order != null)
-            {
-                _Context.Orders.Remove(order);
-                await _Context.SaveChangesAsync();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            _Context.Orders.Remove(order);
+            await _Context.SaveChangesAsync();
         }
     }
 }
