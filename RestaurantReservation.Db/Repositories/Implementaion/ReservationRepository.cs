@@ -37,19 +37,10 @@ namespace RestaurantReservation.Db.Repositories.Implementaion
             return reservation;
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task DeleteAsync(Reservation reservation)
         {
-            var reservation = await _Context.Reservations.FindAsync(id);
-            if (reservation != null)
-            {
-                _Context.Reservations.Remove(reservation);
-                await _Context.SaveChangesAsync();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            _Context.Reservations.Remove(reservation);
+            await _Context.SaveChangesAsync();
         }
 
         public async Task<List<Reservation>> GetReservationsByCustomerAsync(int id)

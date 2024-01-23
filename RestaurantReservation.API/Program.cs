@@ -25,6 +25,9 @@ builder.Services.AddTransient<IRestaurantService, RestaurantService>();
 builder.Services.AddTransient<IMenuItemsRepository, MenuItemsRepository>();
 builder.Services.AddTransient<IMenuItemsService, MenuItemsService>();
 
+builder.Services.AddTransient<IReservationRepository, ReservationRepository>();
+builder.Services.AddTransient<IReservationService, ReservationService>();
+
 builder.Services.AddDbContext<RestaurantReservationDbContext>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

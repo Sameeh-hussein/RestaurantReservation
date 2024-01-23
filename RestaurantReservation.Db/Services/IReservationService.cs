@@ -7,7 +7,7 @@ namespace RestaurantReservation.Db.Services
         Task<IEnumerable<Reservation>> GetAllAsync();
         Task<Reservation?> GetByIdAsync(int id);
         Task<Reservation> CreateAsync(Reservation reservation);
-        Task<bool> DeleteAsync(int Id);
+        Task DeleteAsync(Reservation reservation);
         Task<Reservation> UpdateAsync(Reservation reservation);
         Task<List<Reservation>> GetReservationsByCustomerAsync(int id);
     }
