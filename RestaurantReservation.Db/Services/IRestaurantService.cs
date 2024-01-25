@@ -9,5 +9,6 @@ namespace RestaurantReservation.Db.Services
         Task<Restaurant> CreateAsync(Restaurant restaurant);
         Task DeleteAsync(Restaurant restaurant);
         Task<Restaurant> UpdateAsync(Restaurant restaurant);
+        Task<bool> RestaurantExist(int restaurantId);
     }
 }

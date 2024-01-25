@@ -26,8 +26,7 @@ namespace RestaurantReservation.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<MenuItemsDTO>>> GetAllMenuItems(int restaurantid)
         {
-            var restaurant = await _restaurantService.GetByIdAsync(restaurantid);
-            if (restaurant == null)
+            if(! await _restaurantService.RestaurantExist(restaurantid))
             {
                 return NotFound();
             }
@@ -46,8 +45,7 @@ namespace RestaurantReservation.API.Controllers
         [HttpGet("{menuitemsid}", Name = "GetMenuItemById")]
         public async Task<ActionResult<MenuItemsDTO>> GetMenuItemById(int restaurantid, int menuitemsid)
         {
-            var restaurant = await _restaurantService.GetByIdAsync(restaurantid);
-            if(restaurant == null)
+            if (!await _restaurantService.RestaurantExist(restaurantid))
             {
                 return NotFound();
             }
@@ -69,8 +67,7 @@ namespace RestaurantReservation.API.Controllers
                 MenuItemsForCreationDTO menuItemsForCreationDTO
             )
         {
-            var resturant = await _restaurantService.GetByIdAsync(restaurantid);
-            if (resturant == null)
+            if (!await _restaurantService.RestaurantExist(restaurantid))
             {
                 return NotFound();
             }
@@ -98,10 +95,9 @@ namespace RestaurantReservation.API.Controllers
                 MenuItemsForUpdateDTO menuItemsForUpdateDTO
             )
         {
-            var restaurant = await _restaurantService.GetByIdAsync(restaurantid);
-            if(restaurant == null)
-            { 
-                return NotFound(); 
+            if (!await _restaurantService.RestaurantExist(restaurantid))
+            {
+                return NotFound();
             }
 
             var menuItem = await _menuItemsService.GetMenuItemInRestaurantAsync(restaurantid, menuitemid);
@@ -120,8 +116,7 @@ namespace RestaurantReservation.API.Controllers
         [HttpDelete("{menuitemid}")]
         public async Task<ActionResult> DeleteMenuItemInResturant(int restaurantid, int menuitemid)
         {
-            var restaurant = await _restaurantService.GetByIdAsync(restaurantid);
-            if(restaurant == null)
+            if (!await _restaurantService.RestaurantExist(restaurantid))
             {
                 return NotFound();
             }
