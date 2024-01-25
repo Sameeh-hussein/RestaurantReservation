@@ -42,6 +42,11 @@ namespace RestaurantReservation.Db.Services.Implementaion
         {
             await _repository.DeleteAsync(order);
         }
+
+        public async Task<bool> OrderExist(int reservationId, int orderId)
+        {
+            return await _repository.OrderExist(reservationId, orderId);
+        }
     }
 
 }

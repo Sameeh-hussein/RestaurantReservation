@@ -9,5 +9,6 @@ namespace RestaurantReservation.Db.Repositories
         Task<Order> CreateOrderInReservationAsync(int reservationId, Order order);
         Task DeleteAsync(Order order);
         Task<Order> UpdateAsync(Order order);
+        Task<bool> OrderExist(int reservationId, int orderId);
     }
 }

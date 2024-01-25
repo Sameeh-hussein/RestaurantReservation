@@ -38,14 +38,12 @@ namespace RestaurantReservation.API.Controllers
                 int orderid
             )
         {
-            var reservation = await _reservationService.GetByIdAsync(reservationid);
-            if (reservation == null)
+            if(!await _reservationService.ReservationExist(reservationid))
             {
                 return NotFound();
             }
 
-            var order = await _orderService.GetOrderByIdInReservationAsync(reservationid, orderid);
-            if (order == null)
+            if(!await _orderService.OrderExist(reservationid, orderid))
             {
                 return NotFound();
             }
@@ -64,14 +62,12 @@ namespace RestaurantReservation.API.Controllers
                 int orderitemsid
             )
         {
-            var reservation = await _reservationService.GetByIdAsync(reservationid);
-            if (reservation == null)
+            if (!await _reservationService.ReservationExist(reservationid))
             {
                 return NotFound();
             }
 
-            var order = await _orderService.GetOrderByIdInReservationAsync(reservationid, orderid);
-            if (order == null)
+            if (!await _orderService.OrderExist(reservationid, orderid))
             {
                 return NotFound();
             }
@@ -94,14 +90,12 @@ namespace RestaurantReservation.API.Controllers
                 OrderItemsForCreationDTO orderItemsForCreationDTO
             )
         {
-            var reservation = await _reservationService.GetByIdAsync(reservationid);
-            if (reservation == null)
+            if (!await _reservationService.ReservationExist(reservationid))
             {
                 return NotFound();
             }
 
-            var order = await _orderService.GetOrderByIdInReservationAsync(reservationid, orderid);
-            if (order == null)
+            if (!await _orderService.OrderExist(reservationid, orderid))
             {
                 return NotFound();
             }
@@ -131,14 +125,12 @@ namespace RestaurantReservation.API.Controllers
                 OrderItemsForUpdateDTO orderItemsForUpdateDTO
             )
         {
-            var reservation = await _reservationService.GetByIdAsync(reservationid);
-            if (reservation == null)
+            if (!await _reservationService.ReservationExist(reservationid))
             {
                 return NotFound();
             }
 
-            var order = await _orderService.GetOrderByIdInReservationAsync(reservationid, orderid);
-            if (order == null)
+            if (!await _orderService.OrderExist(reservationid, orderid))
             {
                 return NotFound();
             }
@@ -163,14 +155,12 @@ namespace RestaurantReservation.API.Controllers
                 int orderitemsid
             )
         {
-            var reservation = await _reservationService.GetByIdAsync(reservationid);
-            if (reservation == null)
+            if (!await _reservationService.ReservationExist(reservationid))
             {
                 return NotFound();
             }
 
-            var order = await _orderService.GetOrderByIdInReservationAsync(reservationid, orderid);
-            if (order == null)
+            if (!await _orderService.OrderExist(reservationid, orderid))
             {
                 return NotFound();
             }

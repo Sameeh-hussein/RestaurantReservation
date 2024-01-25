@@ -43,5 +43,10 @@ namespace RestaurantReservation.Db.Repositories.Implementaion
             _Context.Orders.Remove(order);
             await _Context.SaveChangesAsync();
         }
+
+        public async Task<bool> OrderExist(int reservationId, int orderId)
+        {
+            return await _Context.Orders.AnyAsync(o => o.reservationId == reservationId && o.orderId == orderId);
+        }
     }
 }
