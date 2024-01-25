@@ -10,5 +10,6 @@ namespace RestaurantReservation.Db.Services
         Task DeleteAsync(Reservation reservation);
         Task<Reservation> UpdateAsync(Reservation reservation);
         Task<List<Reservation>> GetReservationsByCustomerAsync(int id);
+        Task<bool> ReservationExist(int reservationId);
     }
 }

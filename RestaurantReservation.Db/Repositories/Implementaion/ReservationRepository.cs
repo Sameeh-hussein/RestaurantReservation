@@ -43,6 +43,11 @@ namespace RestaurantReservation.Db.Repositories.Implementaion
             await _Context.SaveChangesAsync();
         }
 
+        public async Task<bool> ReservationExist(int reservationId)
+        {
+            return await _Context.Reservations.AnyAsync(r => r.reservationId == reservationId);
+        }
+
         public async Task<List<Reservation>> GetReservationsByCustomerAsync(int id)
         {
             return await _Context.Reservations.Where(r => r.customerId == id)

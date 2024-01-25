@@ -47,6 +47,11 @@ namespace RestaurantReservation.Db.Services.Implementaion
         {
             return await _repository.GetReservationsByCustomerAsync(reservationId);
         }
+
+        public async Task<bool> ReservationExist(int reservationId)
+        {
+            return await _repository.ReservationExist(reservationId);
+        }
     }
 
 }

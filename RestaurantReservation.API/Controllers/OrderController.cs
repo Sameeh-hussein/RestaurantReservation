@@ -25,8 +25,7 @@ namespace RestaurantReservation.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<OrderDTO>>> GetAllOrdersInReservation(int reservationid)
         {
-            var reservation = await _reservationService.GetByIdAsync(reservationid);
-            if(reservation == null)
+            if(! await _reservationService.ReservationExist(reservationid))
             {
                 return NotFound();
             }
@@ -41,8 +40,7 @@ namespace RestaurantReservation.API.Controllers
         [HttpGet("{orderid}", Name = "GetOrderInReservationById")]
         public async Task<ActionResult<OrderDTO>> GetOrderInReservation(int reservationid, int orderid)
         {
-            var reservation = await _reservationService.GetByIdAsync(reservationid);
-            if(reservation == null)
+            if (!await _reservationService.ReservationExist(reservationid))
             {
                 return NotFound();
             }
@@ -63,8 +61,7 @@ namespace RestaurantReservation.API.Controllers
                 OrderForCreationDTO orderForCreationDTO
             )
         {
-            var reservation = await _reservationService.GetByIdAsync(reservationid);
-            if (reservation == null)
+            if (!await _reservationService.ReservationExist(reservationid))
             {
                 return NotFound();
             }
@@ -92,8 +89,7 @@ namespace RestaurantReservation.API.Controllers
                 OrderForUpdateDTO orderForUpdateDTO
             )
         {
-            var reservation = await _reservationService.GetByIdAsync(reservationid);
-            if(reservation == null)
+            if (!await _reservationService.ReservationExist(reservationid))
             {
                 return NotFound();
             }
@@ -114,8 +110,7 @@ namespace RestaurantReservation.API.Controllers
         [HttpDelete("{orderid}")]
         public async Task<ActionResult> DeleteOrderInReservation(int reservationid, int orderid)
         {
-            var reservation = await _reservationService.GetByIdAsync(reservationid);
-            if(reservation == null)
+            if (!await _reservationService.ReservationExist(reservationid))
             {
                 return NotFound();
             }
