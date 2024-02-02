@@ -17,7 +17,7 @@ namespace RestaurantReservation.Db.Models
         public string? generateToken(ApplicationUser applicationUser, IList<string> userRoles)
         {
             // 1- Generate SecurityKey
-            var securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_configuration["Jet:Key"]));
+            var securityKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]));
 
             // 2- Generate ClaimsArrey
             var authClaims = new List<Claim>()
