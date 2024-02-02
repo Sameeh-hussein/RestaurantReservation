@@ -1,10 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using RestaurantReservation.Db.Models;
 
 namespace RestaurantReservation.Db
 {
-    public class RestaurantReservationDbContext: DbContext
+    public class RestaurantReservationDbContext: IdentityDbContext<ApplicationUser>
     {
 
         public DbSet<Restaurant> Restaurants {  get; set; }
