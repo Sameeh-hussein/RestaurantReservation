@@ -64,6 +64,7 @@ namespace RestaurantReservation.API.Controllers
         }
 
         [HttpPut("{customerid}")]
+        [Authorize(Roles = Roles.Admin)]
         public async Task<ActionResult> UpdateCustomer(
             int customerid,
             CustomerForUpdateDTO customerForUpdateDTO
@@ -83,6 +84,7 @@ namespace RestaurantReservation.API.Controllers
         }
 
         [HttpDelete("{customerid}")]
+        [Authorize(Roles = Roles.Admin)]
         public async Task<ActionResult> DeleteCustomer(int customerid)
         {
             var customer = await _customerService.GetByIdAsync(customerid);

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using RestaurantReservation.API.Authentication;
 using RestaurantReservation.API.DTOEntity;
 using RestaurantReservation.Db.Models;
 using RestaurantReservation.Db.Services;
@@ -86,6 +87,7 @@ namespace RestaurantReservation.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = Roles.Admin)]
         public async Task<ActionResult> AddOrderItemsInOrderInReservation(
                 int reservationid,
                 int orderid,
@@ -120,6 +122,7 @@ namespace RestaurantReservation.API.Controllers
         }
 
         [HttpPut("{orderitemsid}")]
+        [Authorize(Roles = Roles.Admin)]
         public async Task<ActionResult> UpdateOrderItemsInOrderInReservation(
                 int reservationid,
                 int orderid,
@@ -151,6 +154,7 @@ namespace RestaurantReservation.API.Controllers
         }
 
         [HttpDelete("{orderitemsid}")]
+        [Authorize(Roles = Roles.Admin)]
         public async Task<ActionResult> DeleteOrderItemsInOrderInReservation(
                 int reservationid,
                 int orderid,

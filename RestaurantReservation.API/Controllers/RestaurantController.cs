@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using RestaurantReservation.API.Authentication;
 using RestaurantReservation.API.DTOEntity;
 using RestaurantReservation.Db.Models;
 using RestaurantReservation.Db.Services;
@@ -45,6 +46,7 @@ namespace RestaurantReservation.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = Roles.Admin)]
         public async Task<ActionResult> AddRestaurant(RestaurantForCreationDTO restaurantForCreationDTO)
         {
             var restaurant = _mapper.Map<Restaurant>(restaurantForCreationDTO);
@@ -63,6 +65,7 @@ namespace RestaurantReservation.API.Controllers
         }
 
         [HttpPut("{restaurantid}")]
+        [Authorize(Roles = Roles.Admin)]
         public async Task<ActionResult> UpdateRestaurant(
             int restaurantid,
             RestaurantForUpdateDTO restaurantForUpdateDTO
@@ -82,6 +85,7 @@ namespace RestaurantReservation.API.Controllers
         }
 
         [HttpDelete("{restaurantid}")]
+        [Authorize(Roles = Roles.Admin)]
         public async Task<ActionResult> DeleteCustomer(int restaurantid)
         {
             var resturant = await _restaurantService.GetByIdAsync(restaurantid);

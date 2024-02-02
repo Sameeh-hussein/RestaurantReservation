@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using RestaurantReservation.API.Authentication;
 using RestaurantReservation.API.DTOEntity;
 using RestaurantReservation.Db.Models;
 using RestaurantReservation.Db.Services;
@@ -64,6 +65,7 @@ namespace RestaurantReservation.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = Roles.Admin)]
         public async Task<ActionResult> CreatMenuItemInRestaurant(
                 int restaurantid, 
                 MenuItemsForCreationDTO menuItemsForCreationDTO
@@ -91,6 +93,7 @@ namespace RestaurantReservation.API.Controllers
         }
 
         [HttpPut("{menuitemid}")]
+        [Authorize(Roles = Roles.Admin)]
         public async Task<ActionResult> UpdateMenuItemInRestaurant(
                 int restaurantid,
                 int menuitemid,
@@ -116,6 +119,7 @@ namespace RestaurantReservation.API.Controllers
         }
 
         [HttpDelete("{menuitemid}")]
+        [Authorize(Roles = Roles.Admin)]
         public async Task<ActionResult> DeleteMenuItemInResturant(int restaurantid, int menuitemid)
         {
             if (!await _restaurantService.RestaurantExist(restaurantid))
