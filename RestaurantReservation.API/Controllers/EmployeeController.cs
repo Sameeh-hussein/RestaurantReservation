@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RestaurantReservation.API.DTOEntity;
@@ -7,6 +8,7 @@ using RestaurantReservation.Db.Services;
 
 namespace RestaurantReservation.API.Controllers
 {
+    [Authorize]
     [Route("api/employees")]
     [ApiController]
     public class EmployeeController : ControllerBase

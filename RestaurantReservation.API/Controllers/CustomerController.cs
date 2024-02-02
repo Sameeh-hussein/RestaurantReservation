@@ -1,14 +1,17 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using RestaurantReservation.API.Authentication;
 using RestaurantReservation.API.DTOEntity;
 using RestaurantReservation.Db.Models;
 using RestaurantReservation.Db.Services;
 
 namespace RestaurantReservation.API.Controllers
 {
-    [Route("api/customers")]
     [ApiController]
+    [Authorize]
+    [Route("api/customers")]
     public class CustomerController : ControllerBase
     {
         private readonly ICustomerService _customerService;
@@ -42,6 +45,7 @@ namespace RestaurantReservation.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = Roles.Admin)]
         public async Task<ActionResult> AddCustomer(CustomerForCreationDTO customerForCreationDTO)
         {
             var customer = _mapper.Map<Customer>(customerForCreationDTO);
