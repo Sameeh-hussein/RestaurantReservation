@@ -18,12 +18,14 @@ namespace RestaurantReservation.API.Controllers
         private readonly IOrderService _orderService;
         private readonly IReservationService _reservationService;
         private readonly IMapper _mapper;
+        private readonly ILogger<OrderItemsController> _logger;
 
         public OrderItemsController(
             IOrderItemsService orderItemsService,
             IOrderService orderService,
             IReservationService reservationService,
-            IMapper mapper)
+            IMapper mapper,
+            ILogger<OrderItemsController> logger)
         {
             _orderItemsService = orderItemsService ??
                 throw new ArgumentNullException(nameof(orderItemsService));
@@ -33,6 +35,8 @@ namespace RestaurantReservation.API.Controllers
                 throw new ArgumentNullException(nameof(reservationService));
             _mapper = mapper ??
                 throw new ArgumentNullException(nameof(mapper));
+            _logger = logger ??
+                throw new ArgumentNullException(nameof(logger));
         }
 
         [HttpGet]
@@ -41,20 +45,24 @@ namespace RestaurantReservation.API.Controllers
                 int orderid
             )
         {
-            if(!await _reservationService.ReservationExist(reservationid))
+            _logger.LogInformation($"Attempting to retrieve all order items for order ID: {orderid} in reservation ID: {reservationid}.");
+
+            if (!await _reservationService.ReservationExist(reservationid))
             {
+                _logger.LogWarning($"Reservation with ID: {reservationid} not found.");
                 return NotFound();
             }
 
-            if(!await _orderService.OrderExist(reservationid, orderid))
+            if (!await _orderService.OrderExist(reservationid, orderid))
             {
+                _logger.LogWarning($"Order with ID: {orderid} in reservation ID: {reservationid} not found.");
                 return NotFound();
             }
 
             var orderItems = await _orderItemsService.GetAllOrderItemsInOrderAsync(orderid);
-
             var orderItemsToReturn = _mapper.Map<IEnumerable<OrderItemsDTO>>(orderItems);
 
+            _logger.LogInformation($"Successfully retrieved order items for order ID: {orderid} in reservation ID: {reservationid}.");
             return Ok(orderItemsToReturn);
         }
 
@@ -65,24 +73,25 @@ namespace RestaurantReservation.API.Controllers
                 int orderitemsid
             )
         {
-            if (!await _reservationService.ReservationExist(reservationid))
-            {
-                return NotFound();
-            }
+            _logger.LogInformation($"Attempting to retrieve order item ID: {orderitemsid} for order ID: {orderid} in reservation ID: {reservationid}.");
 
-            if (!await _orderService.OrderExist(reservationid, orderid))
+            if (!await _reservationService.ReservationExist(reservationid) || !await _orderService.OrderExist(reservationid, orderid))
             {
+                _logger.LogWarning($"Order or reservation not found for reservation ID: {reservationid}, order ID: {orderid}.");
                 return NotFound();
             }
 
             var orderItem = await _orderItemsService.GetOrderItemsInOrderByIdAsync(orderid, orderitemsid);
             if (orderItem == null)
             {
+                _logger.LogWarning($"Order item ID: {orderitemsid} for order ID: {orderid} in reservation ID: {reservationid} not found.");
                 return NotFound();
             }
 
             var orderItemsToReturn = _mapper.Map<OrderItemsDTO>(orderItem);
-
+            
+            _logger.LogInformation($"Successfully retrieved order item ID: {orderitemsid} for order ID: {orderid} in reservation ID: {reservationid}.");
+            
             return Ok(orderItemsToReturn);
         }
 
@@ -94,31 +103,36 @@ namespace RestaurantReservation.API.Controllers
                 OrderItemsForCreationDTO orderItemsForCreationDTO
             )
         {
-            if (!await _reservationService.ReservationExist(reservationid))
+            _logger.LogInformation($"Attempting to add an order item to order ID: {orderid} in reservation ID: {reservationid}.");
+
+            try
             {
-                return NotFound();
-            }
+                if (!await _reservationService.ReservationExist(reservationid) || !await _orderService.OrderExist(reservationid, orderid))
+                {
+                    _logger.LogWarning($"Order or reservation not found for reservation ID: {reservationid}, order ID: {orderid}.");
+                    return NotFound();
+                }
 
-            if (!await _orderService.OrderExist(reservationid, orderid))
+                var orderItems = _mapper.Map<OrderItems>(orderItemsForCreationDTO);
+                await _orderItemsService.CreateOrderItemsInOrderAsync(orderid, orderItems);
+
+                var orderItemsToReturn = _mapper.Map<OrderItemsDTO>(orderItems);
+                _logger.LogInformation($"Successfully added an order item to order ID: {orderid} in reservation ID: {reservationid}.");
+                return CreatedAtRoute("GetOrderItemsById",
+                        new
+                        {
+                            reservationid = reservationid,
+                            orderid = orderid,
+                            orderitemsid = orderItemsToReturn.orderItemId
+                        },
+                        orderItemsToReturn
+                    );
+            }
+            catch (Exception ex)
             {
-                return NotFound();
+                _logger.LogError(ex, $"Error adding order item to order ID: {orderid} in reservation ID: {reservationid}.");
+                return StatusCode(500, "An error occurred while processing your request.");
             }
-
-            var orderItems = _mapper.Map<OrderItems>(orderItemsForCreationDTO);
-
-            await _orderItemsService.CreateOrderItemsInOrderAsync(orderid, orderItems);
-
-            var orderItemsToReturn = _mapper.Map<OrderItemsDTO>(orderItems);
-
-            return CreatedAtRoute("GetOrderItemsById",
-                    new
-                    {
-                        reservationid = reservationid,
-                        orderid = orderid,
-                        orderitemsid = orderItemsToReturn.orderItemId
-                    },
-                    orderItemsToReturn
-                );
         }
 
         [HttpPut("{orderitemsid}")]
@@ -130,27 +144,34 @@ namespace RestaurantReservation.API.Controllers
                 OrderItemsForUpdateDTO orderItemsForUpdateDTO
             )
         {
-            if (!await _reservationService.ReservationExist(reservationid))
+            _logger.LogInformation($"Attempting to update order item ID: {orderitemsid} in order ID: {orderid} in reservation ID: {reservationid}.");
+
+            try
             {
-                return NotFound();
-            }
+                if (!await _reservationService.ReservationExist(reservationid) || !await _orderService.OrderExist(reservationid, orderid))
+                {
+                    _logger.LogWarning($"Order or reservation not found for reservation ID: {reservationid}, order ID: {orderid}.");
+                    return NotFound();
+                }
 
-            if (!await _orderService.OrderExist(reservationid, orderid))
+                var orderItem = await _orderItemsService.GetOrderItemsInOrderByIdAsync(orderid, orderitemsid);
+                if (orderItem == null)
+                {
+                    _logger.LogWarning($"Order item ID: {orderitemsid} for order ID: {orderid} in reservation ID: {reservationid} not found.");
+                    return NotFound();
+                }
+
+                _mapper.Map(orderItemsForUpdateDTO, orderItem);
+                await _orderItemsService.UpdateAsync(orderItem);
+
+                _logger.LogInformation($"Successfully updated order item ID: {orderitemsid} in order ID: {orderid} in reservation ID: {reservationid}.");
+                return NoContent();
+            }
+            catch (Exception ex)
             {
-                return NotFound();
+                _logger.LogError(ex, $"Error updating order item ID: {orderitemsid} in order ID: {orderid} in reservation ID: {reservationid}.");
+                return StatusCode(500, "An error occurred while processing your request.");
             }
-
-            var orderItem = await _orderItemsService.GetOrderItemsInOrderByIdAsync(orderid, orderitemsid);
-            if (orderItem == null)
-            {
-                return NotFound();
-            }
-
-            _mapper.Map(orderItemsForUpdateDTO, orderItem);
-
-            await _orderItemsService.UpdateAsync(orderItem);
-
-            return NoContent();
         }
 
         [HttpDelete("{orderitemsid}")]
@@ -161,25 +182,32 @@ namespace RestaurantReservation.API.Controllers
                 int orderitemsid
             )
         {
-            if (!await _reservationService.ReservationExist(reservationid))
+            _logger.LogInformation($"Attempting to delete order item ID: {orderitemsid} from order ID: {orderid} in reservation ID: {reservationid}.");
+
+            try
             {
-                return NotFound();
-            }
+                if (!await _reservationService.ReservationExist(reservationid) || !await _orderService.OrderExist(reservationid, orderid))
+                {
+                    _logger.LogWarning($"Order or reservation not found for reservation ID: {reservationid}, order ID: {orderid}.");
+                    return NotFound();
+                }
 
-            if (!await _orderService.OrderExist(reservationid, orderid))
+                var orderItem = await _orderItemsService.GetOrderItemsInOrderByIdAsync(orderid, orderitemsid);
+                if (orderItem == null)
+                {
+                    _logger.LogWarning($"Order item ID: {orderitemsid} for order ID: {orderid} in reservation ID: {reservationid} not found.");
+                    return NotFound();
+                }
+
+                await _orderItemsService.DeleteAsync(orderItem);
+                _logger.LogInformation($"Successfully deleted order item ID: {orderitemsid} from order ID: {orderid} in reservation ID: {reservationid}.");
+                return NoContent();
+            }
+            catch (Exception ex)
             {
-                return NotFound();
+                _logger.LogError(ex, $"Error deleting order item ID: {orderitemsid} from order ID: {orderid} in reservation ID: {reservationid}.");
+                return StatusCode(500, "An error occurred while processing your request.");
             }
-
-            var orderItem = await _orderItemsService.GetOrderItemsInOrderByIdAsync(orderid, orderitemsid);
-            if (orderItem == null)
-            {
-                return NotFound();
-            }
-
-            await _orderItemsService.DeleteAsync(orderItem);
-
-            return NoContent();
         }
     }
 }
