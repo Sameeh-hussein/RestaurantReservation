@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Castle.Core.Resource;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,19 +17,31 @@ namespace RestaurantReservation.API.Controllers
     {
         private readonly IReservationRepository _reservationRepository;
         private readonly IMapper _mapper;
+        private readonly ILogger<ReservationController> _logger;
 
-        public ReservationController(IReservationRepository reservationRepository, IMapper mapper)
+        public ReservationController(
+            IReservationRepository reservationRepository,
+            IMapper mapper,
+            ILogger<ReservationController> logger)
         {
-            _reservationRepository = reservationRepository ?? throw new ArgumentNullException(nameof(reservationRepository));
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _reservationRepository = reservationRepository ??
+                throw new ArgumentNullException(nameof(reservationRepository));
+            _mapper = mapper ??
+                throw new ArgumentNullException(nameof(mapper));
+            _logger = logger ??
+                throw new ArgumentNullException(nameof(logger));
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ReservationDTO>>> GetAllReservations()
         {
+            _logger.LogInformation("GetAllReservations Start Getting all reservations");
+
             var reservations = await _reservationRepository.GetAllAsync();
 
             var reservationsToReturn = _mapper.Map<IEnumerable<ReservationDTO>>(reservations);
+
+            _logger.LogInformation($"GetAllReservations retrieved {reservations.Count()} reservations successfully.");
 
             return Ok(reservationsToReturn);
         }
@@ -36,13 +49,18 @@ namespace RestaurantReservation.API.Controllers
         [HttpGet("{reservationid}", Name = "GetReservationById")]
         public async Task<ActionResult<ReservationDTO>> GetReservationById(int reservationid)
         {
+            _logger.LogInformation($"GetReservationById started for reservation with ID: {reservationid}.");
+
             var reservation = await _reservationRepository.GetByIdAsync(reservationid);
             if (reservation == null)
             {
+                _logger.LogWarning($"Reservation with ID {reservationid} not found.");
                 return NotFound();
             }
 
             var reservationToReturn = _mapper.Map<ReservationDTO>(reservation);
+
+            _logger.LogInformation($"Retrieved reservation with ID: {reservationid} successfully.");
 
             return Ok(reservationToReturn);
         }
@@ -51,19 +69,31 @@ namespace RestaurantReservation.API.Controllers
         [Authorize(Roles = Roles.Admin)]
         public async Task<ActionResult> AddReservation(ReservationForCreationDTO reservationForCreationDTO)
         {
-            var reservation = _mapper.Map<Reservation>(reservationForCreationDTO);
+            _logger.LogInformation("AddReservation attempting to add a new reservation.");
 
-            await _reservationRepository.CreateAsync(reservation);
+            try
+            {
+                var reservation = _mapper.Map<Reservation>(reservationForCreationDTO);
 
-            var reservationToReturn = _mapper.Map<ReservationDTO>(reservation);
+                await _reservationRepository.CreateAsync(reservation);
 
-            return CreatedAtRoute("GetReservationById",
-                    new
-                    {
-                        reservationid = reservationToReturn.reservationId
-                    },
-                    reservationToReturn
-                );
+                var reservationToReturn = _mapper.Map<ReservationDTO>(reservation);
+
+                _logger.LogInformation($"New Reservation with ID: {reservationToReturn.customerId} added successfully.");
+
+                return CreatedAtRoute("GetReservationById",
+                        new
+                        {
+                            reservationid = reservationToReturn.reservationId
+                        },
+                        reservationToReturn
+                    );
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while adding a new reservation.");
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
         }
 
         [HttpPut("{reservationid}")]
@@ -73,32 +103,58 @@ namespace RestaurantReservation.API.Controllers
                 ReservationForUpdateDTO reservationForUpdateDTO
             )
         {
-            var reservation = await _reservationRepository.GetByIdAsync(reservationid);
-            if(reservation == null)
+            _logger.LogInformation($"UpdateReservation attempting to update reservation with ID: {reservationid}.");
+
+            try
             {
-                return NotFound();
+                var reservation = await _reservationRepository.GetByIdAsync(reservationid);
+                if (reservation == null)
+                {
+                    _logger.LogWarning($"Reservation with ID {reservationid} not found.");
+                    return NotFound();
+                }
+
+                _mapper.Map(reservationForUpdateDTO, reservation);
+
+                await _reservationRepository.UpdateAsync(reservation);
+
+                _logger.LogInformation($"Reservation with ID {reservationid} updated successfully.");
+
+                return NoContent();
             }
-
-            _mapper.Map(reservationForUpdateDTO, reservation);
-
-            await _reservationRepository.UpdateAsync(reservation);
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"An error occurred while updating reservation with ID {reservationid}.");
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
         }
 
         [HttpDelete("{reservationid}")]
         [Authorize(Roles = Roles.Admin)]
         public async Task<ActionResult> DeleteReservation(int reservationid)
         {
-            var reservation = await _reservationRepository.GetByIdAsync(reservationid);
-            if(reservation == null )
+            _logger.LogInformation($"DeleteReservation attempting to delete reservation with ID {reservationid}.");
+
+            try
             {
-                return NotFound();
+                var reservation = await _reservationRepository.GetByIdAsync(reservationid);
+                if (reservation == null)
+                {
+                    _logger.LogWarning($"Reservation with ID {reservationid} not found. Unable to delete.");
+                    return NotFound();
+                }
+
+                await _reservationRepository.DeleteAsync(reservation);
+
+                _logger.LogInformation($"Reservation with ID {reservationid} deleted successfully.");
+
+                return NoContent();
             }
-
-            await _reservationRepository.DeleteAsync(reservation);
-
-            return NoContent();
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"An error occurred while deleting reservation with ID {reservationid}.");
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
         }
     }
 }
