@@ -11,6 +11,10 @@ using RestaurantReservation.Db.Services.Implementaion;
 
 namespace RestaurantReservation.API.Controllers
 {
+    /// <summary>
+    /// API endpoints for managing restaurants
+    /// </summary>>
+     
     [Authorize]
     [Route("api/restaurants")]
     [ApiController]
@@ -33,6 +37,13 @@ namespace RestaurantReservation.API.Controllers
                 throw new ArgumentNullException(nameof(logger));
         }
 
+        /// <summary>
+        /// Retrieves all restaurants.
+        /// </summary>
+        /// <returns>
+        /// ActionResult representing a collection of restaurant data transfer objects (DTOs).
+        /// </returns>
+        /// <response code="200">Returns the collection of restaurants.</response>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RestaurantDTO>>> GetAllRestaurants()
         {
@@ -46,6 +57,15 @@ namespace RestaurantReservation.API.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Retrieves a restaurant by its ID.
+        /// </summary>
+        /// <param name="restaurantid">The ID of the restaurant to retrieve.</param>
+        /// <returns>
+        /// ActionResult representing the restaurant data transfer object (DTO) with the specified ID.
+        /// </returns>
+        /// <response code="200">Returns the restaurant with the specified ID.</response>
+        /// <response code="404">If the restaurant with the given ID is not found.</response>
         [HttpGet("{restaurantid}", Name = "GetRestaurantById")]
         public async Task<ActionResult<CustomerDTO>> GetRestaurantById(int restaurantid)
         {
@@ -65,6 +85,17 @@ namespace RestaurantReservation.API.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Adds a new restaurant.
+        /// </summary>
+        /// <param name="restaurantForCreationDTO">The data transfer object (DTO) containing information about the restaurant to be added.</param>
+        /// <returns>
+        /// ActionResult representing the newly added restaurant, along with a location header for accessing it.
+        /// </returns>
+        /// <response code="201">Returns the newly added restaurant and a location header for accessing it.</response>
+        /// <response code="400">If the input data is invalid.</response>
+        /// <response code="401">If the request is not authorized (user does not have the required role).</response>
+        /// <response code="500">If an unexpected error occurs during restaurant addition.</response>
         [HttpPost]
         [Authorize(Roles = Roles.Admin)]
         public async Task<ActionResult> AddRestaurant(RestaurantForCreationDTO restaurantForCreationDTO)
@@ -96,6 +127,19 @@ namespace RestaurantReservation.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Updates a restaurant.
+        /// </summary>
+        /// <param name="restaurantid">The ID of the restaurant to be updated.</param>
+        /// <param name="restaurantForUpdateDTO">The data transfer object (DTO) containing updated information for the restaurant.</param>
+        /// <returns>
+        /// ActionResult representing the result of the update operation.
+        /// </returns>
+        /// <response code="204">Indicates that the restaurant was successfully updated.</response>
+        /// <response code="400">If the input data is invalid.</response>
+        /// <response code="401">If the request is not authorized (user does not have the required role).</response>
+        /// <response code="404">If the restaurant with the given ID is not found.</response>
+        /// <response code="500">If an unexpected error occurs during restaurant update.</response>
         [HttpPut("{restaurantid}")]
         [Authorize(Roles = Roles.Admin)]
         public async Task<ActionResult> UpdateRestaurant(
@@ -128,6 +172,17 @@ namespace RestaurantReservation.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Deletes a restaurant.
+        /// </summary>
+        /// <param name="restaurantid">The ID of the restaurant to be deleted.</param>
+        /// <returns>
+        /// ActionResult representing the result of the delete operation.
+        /// </returns>
+        /// <response code="204">Indicates that the restaurant was successfully deleted.</response>
+        /// <response code="401">If the request is not authorized (user does not have the required role).</response>
+        /// <response code="404">If the restaurant with the given ID is not found.</response>
+        /// <response code="500">If an unexpected error occurs during restaurant deletion.</response>
         [HttpDelete("{restaurantid}")]
         [Authorize(Roles = Roles.Admin)]
         public async Task<ActionResult> DeleteRestaurant(int restaurantid)

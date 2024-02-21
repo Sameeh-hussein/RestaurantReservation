@@ -8,6 +8,8 @@ using RestaurantReservation.Db.Repositories.Implementaion;
 using RestaurantReservation.Db.Services;
 using RestaurantReservation.Db.Services.Implementaion;
 using System.Text;
+using System.Reflection;
+using Moq;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -85,6 +87,14 @@ builder.Services.AddAuthentication(options =>
         }
 
     );
+
+builder.Services.AddSwaggerGen(c =>
+{
+    // Include XML comments
+    var xmlCommentsFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlCommentsFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentsFile);
+    c.IncludeXmlComments(xmlCommentsFullPath);
+});
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
