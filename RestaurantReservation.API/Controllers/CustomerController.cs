@@ -10,6 +10,10 @@ using RestaurantReservation.Db.Services;
 
 namespace RestaurantReservation.API.Controllers
 {
+    /// <summary>
+    /// API endpoints for managing customers.
+    /// </summary>
+
     [ApiController]
     [Authorize]
     [Route("api/customers")]
@@ -31,7 +35,14 @@ namespace RestaurantReservation.API.Controllers
             _logger = logger ?? 
                 throw new ArgumentNullException(nameof(logger));
         }
-        
+
+        /// <summary>
+        /// Retrieves all customers.
+        /// </summary>
+        /// <returns>
+        /// ActionResult representing a collection of customer data transfer objects (DTOs).
+        /// </returns>
+        /// <response code="200">Returns the collection of customers.</response>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CustomerDTO>>> GetAllCustomers()
         {
@@ -45,6 +56,15 @@ namespace RestaurantReservation.API.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Retrieves a specific customer by ID.
+        /// </summary>
+        /// <param name="customerid">The ID of the customer to retrieve.</param>
+        /// <returns>
+        /// ActionResult representing the customer data transfer object (DTO) with the specified ID.
+        /// </returns>
+        /// <response code="200">Returns the customer with the specified ID.</response>
+        /// <response code="404">If the customer with the given ID is not found.</response>
         [HttpGet("{customerid}", Name ="GetCustomerById")]
         public async Task<ActionResult<CustomerDTO>> GetCustomerById(int customerid)
         {
@@ -63,6 +83,17 @@ namespace RestaurantReservation.API.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Adds a new customer.
+        /// </summary>
+        /// <param name="customerForCreationDTO">The data transfer object (DTO) containing information about the customer to be added.</param>
+        /// <returns>
+        /// ActionResult representing the result of the add operation.
+        /// </returns>
+        /// <response code="201">Indicates that the customer was successfully added.</response>
+        /// <response code="400">If the input data is invalid.</response>
+        /// <response code="401">If the request is not authorized (user does not have the required role).</response>
+        /// <response code="500">If an unexpected error occurs during customer addition.</response>
         [HttpPost]
         [Authorize(Roles = Roles.Admin)]
         public async Task<ActionResult> AddCustomer(CustomerForCreationDTO customerForCreationDTO)
@@ -88,6 +119,19 @@ namespace RestaurantReservation.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Updates a customer.
+        /// </summary>
+        /// <param name="customerid">The ID of the customer to be updated.</param>
+        /// <param name="customerForUpdateDTO">The data transfer object (DTO) containing updated information for the customer.</param>
+        /// <returns>
+        /// ActionResult representing the result of the update operation.
+        /// </returns>
+        /// <response code="204">Indicates that the customer was successfully updated.</response>
+        /// <response code="400">If the input data is invalid.</response>
+        /// <response code="401">If the request is not authorized (user does not have the required role).</response>
+        /// <response code="404">If the customer with the given ID is not found.</response>
+        /// <response code="500">If an unexpected error occurs during customer update.</response>
         [HttpPut("{customerid}")]
         [Authorize(Roles = Roles.Admin)]
         public async Task<ActionResult> UpdateCustomer(
@@ -120,6 +164,17 @@ namespace RestaurantReservation.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Deletes a customer.
+        /// </summary>
+        /// <param name="customerid">The ID of the customer to be deleted.</param>
+        /// <returns>
+        /// ActionResult representing the result of the delete operation.
+        /// </returns>
+        /// <response code="204">Indicates that the customer was successfully deleted.</response>
+        /// <response code="401">If the request is not authorized (user does not have the required role).</response>
+        /// <response code="404">If the customer with the given ID is not found.</response>
+        /// <response code="500">If an unexpected error occurs during customer deletion.</response>
         [HttpDelete("{customerid}")]
         [Authorize(Roles = Roles.Admin)]
         public async Task<ActionResult> DeleteCustomer(int customerid)
