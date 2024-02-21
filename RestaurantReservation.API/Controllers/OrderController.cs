@@ -9,6 +9,10 @@ using RestaurantReservation.Db.Services;
 
 namespace RestaurantReservation.API.Controllers
 {
+    /// <summary>
+    /// API endpoints for managing orders
+    /// </summary>>
+
     [Authorize]
     [Route("api/reservation/{reservationid}/orders")]
     [ApiController]
@@ -35,6 +39,15 @@ namespace RestaurantReservation.API.Controllers
                 throw new ArgumentNullException(nameof(logger));
         }
 
+        /// <summary>
+        /// Retrieves all orders within a reservation by reservation ID.
+        /// </summary>
+        /// <param name="reservationid">The ID of the reservation.</param>
+        /// <returns>
+        /// A collection of order data transfer objects (DTOs) representing the orders in the reservation.
+        /// </returns>
+        /// <response code="200">Returns the collection of orders in the reservation.</response>
+        /// <response code="404">If the reservation with the given ID is not found.</response>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<OrderDTO>>> GetAllOrdersInReservation(int reservationid)
         {
@@ -54,6 +67,16 @@ namespace RestaurantReservation.API.Controllers
             return Ok(orderToReturn);
         }
 
+        /// <summary>
+        /// Retrieves an order within a reservation by reservation ID and order ID.
+        /// </summary>
+        /// <param name="reservationid">The ID of the reservation.</param>
+        /// <param name="orderid">The ID of the order.</param>
+        /// <returns>
+        /// ActionResult representing the result of the retrieval operation.
+        /// </returns>
+        /// <response code="200">Returns the order with the specified ID in the reservation.</response>
+        /// <response code="404">If the reservation or the order with the given IDs is not found.</response>
         [HttpGet("{orderid}", Name = "GetOrderInReservationById")]
         public async Task<ActionResult<OrderDTO>> GetOrderInReservation(int reservationid, int orderid)
         {
@@ -77,6 +100,20 @@ namespace RestaurantReservation.API.Controllers
             _logger.LogInformation($"Successfully retrieved order ID: {orderid} for reservation ID: {reservationid}.");
             return Ok(orderToReturn);
         }
+
+        /// <summary>
+        /// Creates a new order in a reservation.
+        /// </summary>
+        /// <param name="reservationid">The ID of the reservation where the order will be created.</param>
+        /// <param name="orderForCreationDTO">The data transfer object (DTO) containing information about the order to be created.</param>
+        /// <returns>
+        /// ActionResult representing the newly created order, along with a location header for accessing it.
+        /// </returns>
+        /// <response code="201">Returns the newly created order and a location header for accessing it.</response>
+        /// <response code="400">If the input data is invalid.</response>
+        /// <response code="401">If the request is not authorized (user does not have the required role).</response>
+        /// <response code="404">If the reservation with the given ID is not found.</response>
+        /// <response code="500">If an unexpected error occurs during order creation.</response>
         [HttpPost]
         [Authorize(Roles = Roles.Admin)]
         public async Task<ActionResult> AddOrderToReservation(
@@ -117,6 +154,20 @@ namespace RestaurantReservation.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Updates a order within a reservation.
+        /// </summary>
+        /// <param name="reservationid">The ID of the reservation containing the order to be updated.</param>
+        /// <param name="orderid">The ID of the order to be updated.</param>
+        /// <param name="orderForUpdateDTO">The data transfer object (DTO) containing the updated information for the order.</param>
+        /// <returns>
+        /// ActionResult representing the result of the update operation.
+        /// </returns>
+        /// <response code="204">Indicates that the order was successfully updated.</response>
+        /// <response code="400">If the input data is invalid.</response>
+        /// <response code="401">If the request is not authorized (user does not have the required role).</response>
+        /// <response code="404">If the reservation or order with the given IDs is not found.</response>
+        /// <response code="500">If an unexpected error occurs during order update.</response>
         [HttpPut("{orderid}")]
         [Authorize(Roles = Roles.Admin)]
         public async Task<ActionResult> UpdateOrderInReservation(
@@ -156,6 +207,18 @@ namespace RestaurantReservation.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Deletes a order from a reservation.
+        /// </summary>
+        /// <param name="reservationid">The ID of the reservation from which the order will be deleted.</param>
+        /// <param name="orderid">The ID of the table to be deleted.</param>
+        /// <returns>
+        /// ActionResult representing the result of the delete operation.
+        /// </returns>
+        /// <response code="204">Indicates that the order was successfully deleted.</response>
+        /// <response code="401">If the request is not authorized (user does not have the required role).</response>
+        /// <response code="404">If the reservation or order with the given IDs is not found.</response>
+        /// <response code="500">If an unexpected error occurs during order deletion.</response>
         [HttpDelete("{orderid}")]
         [Authorize(Roles = Roles.Admin)]
         public async Task<ActionResult> DeleteOrderInReservation(int reservationid, int orderid)
