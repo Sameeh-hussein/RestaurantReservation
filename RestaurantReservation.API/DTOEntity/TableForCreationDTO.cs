@@ -5,7 +5,5 @@ namespace RestaurantReservation.API.DTOEntity
     public class TableForCreationDTO
     {
         public int capacity { get; set; }
-
-        public List<Reservation> reservations { get; set; }
     }
 }

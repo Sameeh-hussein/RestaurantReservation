@@ -22,12 +22,12 @@ namespace RestaurantReservation.Db.Services.Implementaion
             return await _repository.GetTableByIdInRestaurantAsync(restaurantId, tableId);
         }
 
-        public async Task<Table> CreateAsync(Table Table)
+        public async Task<Table> CreateAsync(int restaurantId, Table table)
         {
-            if (Table == null)
-                throw new ArgumentNullException(nameof(Table), "cannot be null.");
+            if (table == null)
+                throw new ArgumentNullException(nameof(table), "cannot be null.");
 
-            return await _repository.CreateAsync(Table);
+            return await _repository.CreateAsync(restaurantId, table);
         }
 
         public async Task<Table> UpdateAsync(Table Table)
@@ -38,9 +38,9 @@ namespace RestaurantReservation.Db.Services.Implementaion
             return await _repository.UpdateAsync(Table);
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task DeleteAsync(Table table)
         {
-            return await _repository.DeleteAsync(id);
+            await _repository.DeleteAsync(table);
         }
     }
 
