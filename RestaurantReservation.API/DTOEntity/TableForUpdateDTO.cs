@@ -7,7 +7,5 @@ namespace RestaurantReservation.API.DTOEntity
         public int capacity { get; set; }
 
         public int restaurantId { get; set; }
-
-        public List<Reservation> reservations { get; set; }
     }
 }

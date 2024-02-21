@@ -6,8 +6,8 @@ namespace RestaurantReservation.Db.Services
     {
         Task<IEnumerable<Table>> GetAllTablesInRestaurantAsync(int restaurantId);
         Task<Table?> GetTableByIdInRestaurantAsync(int restaurantId, int tableId);
-        Task<Table> CreateAsync(Table table);
-        Task<bool> DeleteAsync(int Id);
+        Task<Table> CreateAsync(int restaurantId, Table table);
+        Task DeleteAsync(Table table);
         Task<Table> UpdateAsync(Table table);
     }
 }

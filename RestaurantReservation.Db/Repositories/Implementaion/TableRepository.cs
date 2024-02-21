@@ -24,9 +24,10 @@ namespace RestaurantReservation.Db.Repositories.Implementaion
             return await _Context.Tables.FirstOrDefaultAsync(c => c.tableId == tableId && c.restaurantId == restaurantId);
         }
 
-        public async Task<Table> CreateAsync(Table table)
+        public async Task<Table> CreateAsync(int restaurantId, Table table)
         {
             _Context.Tables.Add(table);
+            table.restaurantId = restaurantId;
             await _Context.SaveChangesAsync();
             return table;
         }
@@ -38,19 +39,10 @@ namespace RestaurantReservation.Db.Repositories.Implementaion
             return table;
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task DeleteAsync(Table table)
         {
-            var table = await _Context.Tables.FindAsync(id);
-            if (table != null)
-            {
-                _Context.Tables.Remove(table);
-                await _Context.SaveChangesAsync();
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            _Context.Tables.Remove(table);
+            await _Context.SaveChangesAsync();
         }
     }
 }
