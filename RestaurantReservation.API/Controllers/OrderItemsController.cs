@@ -9,6 +9,10 @@ using RestaurantReservation.Db.Services;
 
 namespace RestaurantReservation.API.Controllers
 {
+    /// <summary>
+    /// API endpoints for managing order items
+    /// </summary>>
+
     [Authorize]
     [Route("api/reservation/{reservationid}/orders/{orderid}/orderitems")]
     [ApiController]
@@ -39,6 +43,16 @@ namespace RestaurantReservation.API.Controllers
                 throw new ArgumentNullException(nameof(logger));
         }
 
+        /// <summary>
+        /// Retrieves all order items in an order within a reservation.
+        /// </summary>
+        /// <param name="reservationid">The ID of the reservation.</param>
+        /// <param name="orderid">The ID of the order within the reservation.</param>
+        /// <returns>
+        /// ActionResult representing a collection of order item data transfer objects (DTOs).
+        /// </returns>
+        /// <response code="200">Returns the collection of order items.</response>
+        /// <response code="404">If the reservation or order with the given IDs are not found.</response>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<OrderItemsDTO>>> GetAllOrderItemsInOrderInReservation(
                 int reservationid,
@@ -66,6 +80,17 @@ namespace RestaurantReservation.API.Controllers
             return Ok(orderItemsToReturn);
         }
 
+        /// <summary>
+        /// Retrieves a specific order item within an order in a reservation.
+        /// </summary>
+        /// <param name="reservationid">The ID of the reservation.</param>
+        /// <param name="orderid">The ID of the order within the reservation.</param>
+        /// <param name="orderitemsid">The ID of the order item to retrieve.</param>
+        /// <returns>
+        /// ActionResult representing the order item data transfer object (DTO) with the specified ID.
+        /// </returns>
+        /// <response code="200">Returns the order item with the specified ID.</response>
+        /// <response code="404">If the reservation, order, or order item with the given IDs are not found.</response>
         [HttpGet("{orderitemsid}", Name = "GetOrderItemsById")]
         public async Task<ActionResult<OrderItemsDTO>> GetOrderItemsInOrderInReservation(
                 int reservationid,
@@ -95,6 +120,20 @@ namespace RestaurantReservation.API.Controllers
             return Ok(orderItemsToReturn);
         }
 
+        /// <summary>
+        /// Adds an order item to an order within a reservation.
+        /// </summary>
+        /// <param name="reservationid">The ID of the reservation.</param>
+        /// <param name="orderid">The ID of the order within the reservation.</param>
+        /// <param name="orderItemsForCreationDTO">The data transfer object (DTO) containing information about the order item to be added.</param>
+        /// <returns>
+        /// ActionResult representing the result of the add operation.
+        /// </returns>
+        /// <response code="201">Indicates that the order item was successfully added to the order within the reservation.</response>
+        /// <response code="400">If the input data is invalid.</response>
+        /// <response code="401">If the request is not authorized (user does not have the required role).</response>
+        /// <response code="404">If the reservation or order with the given IDs are not found.</response>
+        /// <response code="500">If an unexpected error occurs during order item addition.</response>
         [HttpPost]
         [Authorize(Roles = Roles.Admin)]
         public async Task<ActionResult> AddOrderItemsInOrderInReservation(
@@ -135,6 +174,21 @@ namespace RestaurantReservation.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Updates an order item within an order in a reservation.
+        /// </summary>
+        /// <param name="reservationid">The ID of the reservation.</param>
+        /// <param name="orderid">The ID of the order within the reservation.</param>
+        /// <param name="orderitemsid">The ID of the order item to be updated.</param>
+        /// <param name="orderItemsForUpdateDTO">The data transfer object (DTO) containing updated information for the order item.</param>
+        /// <returns>
+        /// ActionResult representing the result of the update operation.
+        /// </returns>
+        /// <response code="204">Indicates that the order item was successfully updated.</response>
+        /// <response code="400">If the input data is invalid.</response>
+        /// <response code="401">If the request is not authorized (user does not have the required role).</response>
+        /// <response code="404">If the reservation, order, or order item with the given IDs are not found.</response>
+        /// <response code="500">If an unexpected error occurs during order item update.</response>
         [HttpPut("{orderitemsid}")]
         [Authorize(Roles = Roles.Admin)]
         public async Task<ActionResult> UpdateOrderItemsInOrderInReservation(
@@ -174,6 +228,19 @@ namespace RestaurantReservation.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Deletes an order item from an order within a reservation.
+        /// </summary>
+        /// <param name="reservationid">The ID of the reservation.</param>
+        /// <param name="orderid">The ID of the order within the reservation.</param>
+        /// <param name="orderitemsid">The ID of the order item to be deleted.</param>
+        /// <returns>
+        /// ActionResult representing the result of the delete operation.
+        /// </returns>
+        /// <response code="204">Indicates that the order item was successfully deleted from the order within the reservation.</response>
+        /// <response code="401">If the request is not authorized (user does not have the required role).</response>
+        /// <response code="404">If the reservation, order, or order item with the given IDs are not found.</response>
+        /// <response code="500">If an unexpected error occurs during order item deletion.</response>
         [HttpDelete("{orderitemsid}")]
         [Authorize(Roles = Roles.Admin)]
         public async Task<ActionResult> DeleteOrderItemsInOrderInReservation(
