@@ -10,6 +10,10 @@ using RestaurantReservation.Db.Services;
 
 namespace RestaurantReservation.API.Controllers
 {
+    /// <summary>
+    /// API endpoints for managing employees.
+    /// </summary>
+
     [Authorize]
     [Route("api/employees")]
     [ApiController]
@@ -32,6 +36,13 @@ namespace RestaurantReservation.API.Controllers
                 throw new ArgumentNullException(nameof(logger));
         }
 
+        /// <summary>
+        /// Retrieves all employees.
+        /// </summary>
+        /// <returns>
+        /// ActionResult representing a collection of employee data transfer objects (DTOs).
+        /// </returns>
+        /// <response code="200">Returns the collection of employees.</response>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<EmployeeDTO>>> GetAllEmployees()
         {
@@ -46,16 +57,44 @@ namespace RestaurantReservation.API.Controllers
             return Ok(employeesToReturn);
         }
 
+        /// <summary>
+        /// Retrieves all manager employees.
+        /// </summary>
+        /// <returns>
+        /// ActionResult representing a collection of manager employee data transfer objects (DTOs).
+        /// </returns>
+        /// <response code="200">Returns the collection of manager employees.</response>
         [HttpGet("manager")]
         public async Task<ActionResult<IEnumerable<EmployeeDTO>>> GetAllManagerEmployees()
         {
-            var employees = await _employeeService.ListManagersAsync();
+            try
+            {
+                _logger.LogInformation("Attempting to retrieve all manager employees.");
 
-            var employeesToReturn = _mapper.Map<IEnumerable<EmployeeDTO>>(employees);
+                var employees = await _employeeService.ListManagersAsync();
 
-            return Ok(employeesToReturn);
+                var employeesToReturn = _mapper.Map<IEnumerable<EmployeeDTO>>(employees);
+
+                _logger.LogInformation($"Retrieved {employees.Count()} manager employees successfully.");
+
+                return Ok(employeesToReturn);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while retrieving manager employees.");
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
         }
 
+        /// <summary>
+        /// Retrieves a specific employee by ID.
+        /// </summary>
+        /// <param name="employeeid">The ID of the employee to retrieve.</param>
+        /// <returns>
+        /// ActionResult representing the employee data transfer object (DTO) with the specified ID.
+        /// </returns>
+        /// <response code="200">Returns the employee with the specified ID.</response>
+        /// <response code="404">If the employee with the given ID is not found.</response>
         [HttpGet("{employeeid}", Name ="GetEmployeeById")]
         public async Task<ActionResult<EmployeeDTO>> GetEmployeeById(int employeeid)
         {
@@ -75,6 +114,15 @@ namespace RestaurantReservation.API.Controllers
             return Ok(employeeToReturn);
         }
 
+        /// <summary>
+        /// Retrieves the average order amount for a specific employee.
+        /// </summary>
+        /// <param name="employeeid">The ID of the employee.</param>
+        /// <returns>
+        /// ActionResult representing the average order amount for the employee.
+        /// </returns>
+        /// <response code="200">Returns the average order amount for the employee.</response>
+        /// <response code="404">If the employee with the given ID is not found.</response>
         [HttpGet("{employeeid}/avareg-order-amount")]
         public async Task<ActionResult<decimal>> GetEmployeeAvaregOrderAmount(int employeeid)
         {
@@ -94,6 +142,17 @@ namespace RestaurantReservation.API.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Adds a new employee.
+        /// </summary>
+        /// <param name="employeeForCreationDTO">The data transfer object (DTO) containing information about the employee to be added.</param>
+        /// <returns>
+        /// ActionResult representing the result of the add operation.
+        /// </returns>
+        /// <response code="201">Indicates that the employee was successfully added.</response>
+        /// <response code="400">If the input data is invalid.</response>
+        /// <response code="401">If the request is not authorized (user does not have the required role).</response>
+        /// <response code="500">If an unexpected error occurs during employee addition.</response>
         [HttpPost]
         [Authorize(Roles = Roles.Admin)]
         public async Task<ActionResult> AddEmployee(EmployeeForCreationDTO employeeForCreationDTO)
@@ -125,6 +184,19 @@ namespace RestaurantReservation.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Updates an employee.
+        /// </summary>
+        /// <param name="employeeid">The ID of the employee to be updated.</param>
+        /// <param name="employeeForUpdateDTO">The data transfer object (DTO) containing updated information for the employee.</param>
+        /// <returns>
+        /// ActionResult representing the result of the update operation.
+        /// </returns>
+        /// <response code="204">Indicates that the employee was successfully updated.</response>
+        /// <response code="400">If the input data is invalid.</response>
+        /// <response code="401">If the request is not authorized (user does not have the required role).</response>
+        /// <response code="404">If the employee with the given ID is not found.</response>
+        /// <response code="500">If an unexpected error occurs during employee update.</response>
         [HttpPut("{employeeid}")]
         [Authorize(Roles = Roles.Admin)]
         public async Task<ActionResult> UpdateEmployee(
@@ -157,6 +229,17 @@ namespace RestaurantReservation.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Deletes an employee.
+        /// </summary>
+        /// <param name="employeeid">The ID of the employee to be deleted.</param>
+        /// <returns>
+        /// ActionResult representing the result of the delete operation.
+        /// </returns>
+        /// <response code="204">Indicates that the employee was successfully deleted.</response>
+        /// <response code="401">If the request is not authorized (user does not have the required role).</response>
+        /// <response code="404">If the employee with the given ID is not found.</response>
+        /// <response code="500">If an unexpected error occurs during employee deletion.</response>
         [HttpDelete("{employeeid}")]
         [Authorize(Roles = Roles.Admin)]
         public async Task<ActionResult> DeleteEmployee(int employeeid)
