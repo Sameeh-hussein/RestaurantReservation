@@ -11,6 +11,10 @@ using RestaurantReservation.Db.Services.Implementaion;
 
 namespace RestaurantReservation.API.Controllers
 {
+    /// <summary>
+    /// API endpoints for managing restaurants
+    /// </summary>>
+     
     [Authorize]
     [Route("api/restaurants")]
     [ApiController]
