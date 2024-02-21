@@ -12,14 +12,14 @@ namespace RestaurantReservation.Db.Services.Implementaion
             _repository = repository;
         }
 
-        public async Task<IEnumerable<Table>> GetAllAsync()
+        public async Task<IEnumerable<Table>> GetAllTablesInRestaurantAsync(int restaurantId)
         {
-            return await _repository.GetAllAsync();
+            return await _repository.GetAllTablesInRestaurantAsync(restaurantId);
         }
 
-        public async Task<Table?> GetByIdAsync(int id)
+        public async Task<Table?> GetTableByIdInRestaurantAsync(int restaurantId, int tableId)
         {
-            return await _repository.GetByIdAsync(id);
+            return await _repository.GetTableByIdInRestaurantAsync(restaurantId, tableId);
         }
 
         public async Task<Table> CreateAsync(Table Table)
