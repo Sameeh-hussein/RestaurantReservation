@@ -10,6 +10,10 @@ using RestaurantReservation.Db.Repositories;
 
 namespace RestaurantReservation.API.Controllers
 {
+    /// <summary>
+    /// API endpoints for managing reservations
+    /// </summary>>
+    
     [Authorize]
     [Route("api/reservation")]
     [ApiController]
@@ -32,6 +36,13 @@ namespace RestaurantReservation.API.Controllers
                 throw new ArgumentNullException(nameof(logger));
         }
 
+        /// <summary>
+        /// Retrieves all reservations.
+        /// </summary>
+        /// <returns>
+        /// ActionResult representing a collection of reservation data transfer objects (DTOs).
+        /// </returns>
+        /// <response code="200">Returns the collection of reservations.</response>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ReservationDTO>>> GetAllReservations()
         {
@@ -46,6 +57,15 @@ namespace RestaurantReservation.API.Controllers
             return Ok(reservationsToReturn);
         }
 
+        /// <summary>
+        /// Retrieves a reservation by its ID.
+        /// </summary>
+        /// <param name="reservationid">The ID of the reservation to retrieve.</param>
+        /// <returns>
+        /// ActionResult representing the reservation data transfer object (DTO) with the specified ID.
+        /// </returns>
+        /// <response code="200">Returns the reservation with the specified ID.</response>
+        /// <response code="404">If the reservation with the given ID is not found.</response>
         [HttpGet("{reservationid}", Name = "GetReservationById")]
         public async Task<ActionResult<ReservationDTO>> GetReservationById(int reservationid)
         {
@@ -65,6 +85,17 @@ namespace RestaurantReservation.API.Controllers
             return Ok(reservationToReturn);
         }
 
+        /// <summary>
+        /// Adds a new reservation.
+        /// </summary>
+        /// <param name="reservationForCreationDTO">The data transfer object (DTO) containing information about the reservation to be added.</param>
+        /// <returns>
+        /// ActionResult representing the newly added reservation, along with a location header for accessing it.
+        /// </returns>
+        /// <response code="201">Returns the newly added reservation and a location header for accessing it.</response>
+        /// <response code="400">If the input data is invalid.</response>
+        /// <response code="401">If the request is not authorized (user does not have the required role).</response>
+        /// <response code="500">If an unexpected error occurs during reservation addition.</response>
         [HttpPost]
         [Authorize(Roles = Roles.Admin)]
         public async Task<ActionResult> AddReservation(ReservationForCreationDTO reservationForCreationDTO)
@@ -96,6 +127,19 @@ namespace RestaurantReservation.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Updates a reservation.
+        /// </summary>
+        /// <param name="reservationid">The ID of the reservation to be updated.</param>
+        /// <param name="reservationForUpdateDTO">The data transfer object (DTO) containing updated information for the reservation.</param>
+        /// <returns>
+        /// ActionResult representing the result of the update operation.
+        /// </returns>
+        /// <response code="204">Indicates that the reservation was successfully updated.</response>
+        /// <response code="400">If the input data is invalid.</response>
+        /// <response code="401">If the request is not authorized (user does not have the required role).</response>
+        /// <response code="404">If the reservation with the given ID is not found.</response>
+        /// <response code="500">If an unexpected error occurs during reservation update.</response>
         [HttpPut("{reservationid}")]
         [Authorize(Roles = Roles.Admin)]
         public async Task<ActionResult> UpdateReservation(
@@ -129,6 +173,17 @@ namespace RestaurantReservation.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Deletes a reservation.
+        /// </summary>
+        /// <param name="reservationid">The ID of the reservation to be deleted.</param>
+        /// <returns>
+        /// ActionResult representing the result of the delete operation.
+        /// </returns>
+        /// <response code="204">Indicates that the reservation was successfully deleted.</response>
+        /// <response code="401">If the request is not authorized (user does not have the required role).</response>
+        /// <response code="404">If the reservation with the given ID is not found.</response>
+        /// <response code="500">If an unexpected error occurs during reservation deletion.</response>
         [HttpDelete("{reservationid}")]
         [Authorize(Roles = Roles.Admin)]
         public async Task<ActionResult> DeleteReservation(int reservationid)
