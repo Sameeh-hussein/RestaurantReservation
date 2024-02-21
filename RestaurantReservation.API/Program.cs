@@ -50,6 +50,9 @@ builder.Services.AddTransient<IOrderService, OrderService>();
 builder.Services.AddTransient<IOrderItemsRepository, OrderItemsRepository>();
 builder.Services.AddTransient<IOrderItemsService, OrderItemsService>();
 
+builder.Services.AddTransient<ITableRepository, TableRepository>();
+builder.Services.AddTransient<ITableService, TableService>();
+
 builder.Services.AddScoped<IUserValidation, UserValidation>();
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 
